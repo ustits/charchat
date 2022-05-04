@@ -1,0 +1,6 @@
+**/build
+/.idea
+/.gradle
+/.vscode
+/db
+/data.ms

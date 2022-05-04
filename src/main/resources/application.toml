@@ -1,0 +1,6 @@
+[database]
+jdbcURL = "jdbc:sqlite:db/charchat.db"
+
+[server]
+port = 8080
+baseURL = "http://localhost:8080"
