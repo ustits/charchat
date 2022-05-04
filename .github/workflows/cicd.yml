@@ -1,0 +1,28 @@
+name: cicd
+
+on:
+  push:
+    paths-ignore:
+      - '*.md'
+      - '*.txt'
+
+jobs:
+  build:
+    uses: ustits/actions/.github/workflows/jdk_build.yml@main
+    with:
+      jdk_version: '11'
+      jdk_distribution: 'temurin'
+      distribution_path: 'build/distributions/charchat.tar'
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    uses: ustits/actions/.github/workflows/jdk_deploy.yml@main
+    with:
+      version: ${{ github.run_id }}
+      tar_name: 'charchat'
+      app_name: 'charchat'
+    secrets:
+      host: ${{ secrets.HOST }}
+      username: ${{ secrets.USERNAME }}
+      ssh_port: ${{ secrets.PORT }}
+      ssh_key: ${{ secrets.KEY }}
