@@ -1,5 +1,5 @@
 [database]
-jdbcURL = "jdbc:sqlite:db/charchat.db"
+jdbcURL = "jdbc:sqlite:charchat.db"
 
 [server]
 port = 8080

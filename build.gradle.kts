@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.ktor.serverStatusPages)
     implementation(libs.ktor.serverCallLogging)
     implementation(libs.ktor.serverMetricsMicrometer)
+    implementation(libs.ktor.serverAuth)
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.4")
 
@@ -61,6 +62,7 @@ dependencies {
     implementation("org.webjars.npm:hyperscript.org:0.9.5")
 
     implementation("dev.ustits.krefty:krefty-core:0.3.4")
+    implementation("org.mindrot:jbcrypt:0.4")
 
     implementation(libs.hoplite.core)
     implementation(libs.hoplite.toml)

@@ -1,0 +1,4 @@
+Add session management
+Add user registration
+Add 401 page
+Add email validation

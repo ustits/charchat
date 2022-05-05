@@ -2,5 +2,5 @@
 /.idea
 /.gradle
 /.vscode
-/db
+**.db
 /data.ms
