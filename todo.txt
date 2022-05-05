@@ -1,4 +1,7 @@
-Add session management
 Add user registration
+Add user name in navbar
+Show registration button only for users without active session
 Add 401 page
 Add email validation
+Add random name generation for newly created user
+Add ability to change user name

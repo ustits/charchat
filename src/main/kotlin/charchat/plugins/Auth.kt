@@ -3,6 +3,8 @@ package charchat.plugins
 import charchat.auth.SqliteUsers
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.sessions.*
+import kotlin.time.Duration
 
 const val FORM_LOGIN_CONFIGURATION_NAME = "form-auth"
 const val FORM_LOGIN_USERNAME_FIELD = "username"
@@ -19,11 +21,18 @@ fun Application.configureAuth() {
                 val user = sqliteUsers.findByLogin(credentials.name)
                 val samePassword = user.password.matches(credentials.password)
                 if (samePassword) {
-                    UserIdPrincipal(credentials.name)
+                    AppPrincipal(user.id, user.name)
                 } else {
                     null
                 }
             }
+        }
+    }
+
+    install(Sessions) {
+        cookie<AppSession>("charchat_session", SessionStorageMemory()) {
+            cookie.path = "/"
+            cookie.maxAge = Duration.parse("7d")
         }
     }
 }

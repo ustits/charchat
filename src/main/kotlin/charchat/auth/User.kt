@@ -1,3 +1,3 @@
 package charchat.auth
 
-data class User(val email: String, val password: Password)
+data class User(val id: Int, val name: String?, val email: String, val password: Password)

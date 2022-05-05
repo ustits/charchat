@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.ktor.serverCallLogging)
     implementation(libs.ktor.serverMetricsMicrometer)
     implementation(libs.ktor.serverAuth)
+    implementation(libs.ktor.serverSessions)
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.4")
 

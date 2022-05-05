@@ -8,12 +8,14 @@ class SqliteUsers {
 
     fun findByLogin(login: String): User {
         return transaction {
-            val statement = prepareStatement("SELECT email, password FROM users WHERE email = ?")
+            val statement = prepareStatement("SELECT id, email, name, password FROM users WHERE email = ?")
             statement.setString(1, login)
             val user = statement.executeQuery().toSequence {
                 User(
-                    email = getString(1),
-                    password = HashedPassword(getString(2))
+                    id = getInt(1),
+                    email = getString(2),
+                    name = getString(3),
+                    password = HashedPassword(getString(4))
                 )
             }.first()
             statement.close()

@@ -53,7 +53,7 @@ fun Application.configureRouting() {
             }
         }
 
-        login(layout)
+        login()
         loginForm(layout)
 
         static("assets") {
