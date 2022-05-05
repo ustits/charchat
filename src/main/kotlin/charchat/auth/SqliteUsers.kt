@@ -3,46 +3,49 @@ package charchat.auth
 import charchat.db.toSequence
 import charchat.db.transaction
 import java.sql.Connection
+import java.sql.ResultSet
 
 class SqliteUsers {
 
-    fun findByLogin(login: String): User {
+    fun findByEmailOrNull(email: String): User? {
         return transaction {
             val statement = prepareStatement("SELECT id, email, name, password FROM users WHERE email = ?")
-            statement.setString(1, login)
+            statement.setString(1, email)
             val user = statement.executeQuery().toSequence {
-                User(
-                    id = getInt(1),
-                    email = getString(2),
-                    name = getString(3),
-                    password = HashedPassword(getString(4))
-                )
-            }.first()
+                toUser(this)
+            }.firstOrNull()
             statement.close()
             user
         }
     }
 
-    fun addOrUpdate(login: String, password: Password) {
-        transaction {
-            if (existsByLogin(login)) {
-                update(login, password.print())
+    fun addOrUpdate(email: String, password: Password): User {
+        return transaction {
+            if (existsByEmail(email)) {
+                updateAndReturn(email, password.print())
             } else {
-                add(login, password.print())
+                add(email, password.print())
             }
         }
     }
 
-    private fun Connection.add(login: String, password: String) {
-        val statement = prepareStatement("INSERT INTO users (email, password) VALUES (?, ?)")
-        statement.setString(1, login)
+    private fun Connection.add(email: String, password: String): User {
+        val statement = prepareStatement("""
+            INSERT INTO users (email, password) VALUES (?, ?) 
+            RETURNING id, email, name, password
+        """.trimIndent())
+        statement.setString(1, email)
         statement.setString(2, password)
-        statement.execute()
+        val user = statement.executeQuery().toSequence {
+            toUser(this)
+        }.first()
+        statement.close()
+        return user
     }
 
-    private fun Connection.existsByLogin(login: String): Boolean {
+    private fun Connection.existsByEmail(email: String): Boolean {
         val statement = prepareStatement("SELECT COUNT (*) FROM users WHERE email = ?")
-        statement.setString(1, login)
+        statement.setString(1, email)
         val count = statement.executeQuery().toSequence {
             getLong(1)
         }.first()
@@ -50,11 +53,28 @@ class SqliteUsers {
         return count > 0
     }
 
-    private fun Connection.update(login: String, password: String) {
-        val statement = prepareStatement("UPDATE users SET password = ? WHERE email = ?")
+    private fun Connection.updateAndReturn(email: String, password: String): User {
+        val statement = prepareStatement("""
+            UPDATE users SET password = ? 
+            WHERE email = ?
+            RETURNING id, email, name, password
+        """.trimIndent())
         statement.setString(1, password)
-        statement.setString(2, login)
-        statement.execute()
+        statement.setString(2, email)
+        val user = statement.executeQuery().toSequence {
+            toUser(this)
+        }.first()
+        statement.close()
+        return user
+    }
+
+    private fun toUser(rs: ResultSet): User {
+        return User(
+            id = rs.getInt("id"),
+            email = rs.getString("email"),
+            name = rs.getString("name"),
+            password = HashedPassword(rs.getString("password"))
+        )
     }
 
 }

@@ -1,9 +1,11 @@
 package charchat.plugins
 
-import charchat.routes.login
-import charchat.routes.loginForm
+import charchat.routes.signIn
+import charchat.routes.signInForm
 import charchat.routes.main
 import charchat.routes.respondPage
+import charchat.routes.signUp
+import charchat.routes.signUpForm
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -35,8 +37,10 @@ fun Application.configureRouting() {
 
     routing {
         main()
-        login()
-        loginForm()
+        signIn()
+        signUp()
+        signInForm()
+        signUpForm()
 
         static("assets") {
             resources("js")

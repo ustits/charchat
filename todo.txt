@@ -1,5 +1,8 @@
-Add user registration
+Add warning in registration page that user with same email already exists
 Add 401 page
+Add logout
+Add password limitations on length
+Add interface for users
 Add email validation
 Add random name generation for newly created user
 Add ability to change user name

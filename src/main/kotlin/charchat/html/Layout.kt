@@ -22,7 +22,11 @@ import kotlinx.html.strong
 import kotlinx.html.title
 import kotlinx.html.ul
 
-class Layout(private val loginURL: String, private val appSession: AppSession?) : Template<HTML> {
+class Layout(
+    val signInURL: String,
+    val signUpURL: String,
+    private val appSession: AppSession?
+) : Template<HTML> {
 
     val content = Placeholder<FlowContent>()
 
@@ -54,9 +58,15 @@ class Layout(private val loginURL: String, private val appSession: AppSession?) 
                     if (appSession == null) {
                         ul {
                             li {
-                                a(href = loginURL) {
+                                a(href = signInURL) {
                                     role = "button"
-                                    +"Login"
+                                    +"Sign in"
+                                }
+                            }
+                            li {
+                                a(href = signUpURL) {
+                                    role = "button"
+                                    +"Sign up"
                                 }
                             }
                         }

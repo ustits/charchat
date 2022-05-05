@@ -7,7 +7,7 @@ import io.ktor.server.sessions.*
 import kotlin.time.Duration
 
 const val FORM_LOGIN_CONFIGURATION_NAME = "form-auth"
-const val FORM_LOGIN_USERNAME_FIELD = "username"
+const val FORM_LOGIN_EMAIL_FIELD = "email"
 const val FORM_LOGIN_PASSWORD_FIELD = "password"
 
 fun Application.configureAuth() {
@@ -15,13 +15,12 @@ fun Application.configureAuth() {
 
     install(Authentication) {
         form(FORM_LOGIN_CONFIGURATION_NAME) {
-            userParamName = FORM_LOGIN_USERNAME_FIELD
+            userParamName = FORM_LOGIN_EMAIL_FIELD
             passwordParamName = FORM_LOGIN_PASSWORD_FIELD
             validate { credentials ->
-                val user = sqliteUsers.findByLogin(credentials.name)
-                val samePassword = user.password.matches(credentials.password)
-                if (samePassword) {
-                    AppPrincipal(user.id, user.name)
+                val user = sqliteUsers.findByEmailOrNull(credentials.name)
+                if (user != null && user.hasSamePassword(credentials.password)) {
+                    user
                 } else {
                     null
                 }
