@@ -2,6 +2,7 @@ package charchat.routes
 
 import charchat.html.Layout
 import charchat.plugins.AppPrincipal
+import charchat.plugins.AppSession
 import charchat.plugins.FORM_LOGIN_CONFIGURATION_NAME
 import charchat.plugins.FORM_LOGIN_PASSWORD_FIELD
 import charchat.plugins.FORM_LOGIN_USERNAME_FIELD
@@ -17,6 +18,7 @@ import io.ktor.server.sessions.*
 import kotlinx.html.FormMethod
 import kotlinx.html.emailInput
 import kotlinx.html.form
+import kotlinx.html.h1
 import kotlinx.html.label
 import kotlinx.html.passwordInput
 import kotlinx.html.submitInput
@@ -26,10 +28,22 @@ import kotlinx.serialization.Serializable
 @Resource("/login")
 object Login
 
-fun Route.loginForm(layout: Layout) {
+fun Route.main() {
+    get("/") {
+        call.respondPage {
+            content {
+                h1 {
+                    +"CharChat"
+                }
+            }
+        }
+    }
+}
+
+fun Route.loginForm() {
     val loginURL = application.href(Login)
     get<Login> {
-        call.respondHtmlTemplate(layout) {
+        call.respondPage {
             content {
                 form(action = loginURL, method = FormMethod.post) {
                     label {
@@ -61,4 +75,10 @@ fun Route.login() {
             call.respondRedirect("/")
         }
     }
+}
+
+suspend fun ApplicationCall.respondPage(block: Layout.() -> Unit) {
+    val session = sessions.get<AppSession>()
+    val loginURL = application.href(Login)
+    respondHtmlTemplate(Layout(loginURL, session), body = block)
 }

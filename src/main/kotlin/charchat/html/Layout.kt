@@ -1,5 +1,6 @@
 package charchat.html
 
+import charchat.plugins.AppSession
 import io.ktor.server.html.*
 import kotlinx.html.FlowContent
 import kotlinx.html.HTML
@@ -14,13 +15,14 @@ import kotlinx.html.main
 import kotlinx.html.meta
 import kotlinx.html.nav
 import kotlinx.html.p
+import kotlinx.html.role
 import kotlinx.html.script
 import kotlinx.html.small
 import kotlinx.html.strong
 import kotlinx.html.title
 import kotlinx.html.ul
 
-class Layout : Template<HTML> {
+class Layout(private val loginURL: String, private val appSession: AppSession?) : Template<HTML> {
 
     val content = Placeholder<FlowContent>()
 
@@ -47,6 +49,20 @@ class Layout : Template<HTML> {
                                     +"CharChat"
                                 }
                             }
+                        }
+                    }
+                    if (appSession == null) {
+                        ul {
+                            li {
+                                a(href = loginURL) {
+                                    role = "button"
+                                    +"Login"
+                                }
+                            }
+                        }
+                    } else if (appSession.name != null && appSession.name.isNotBlank()) {
+                        p {
+                            +appSession.name
                         }
                     }
                 }
