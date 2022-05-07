@@ -4,6 +4,8 @@ import charchat.auth.PlaintextPassword
 import charchat.auth.SqliteUsers
 import charchat.auth.User
 import charchat.html.Layout
+import charchat.html.pages.Page
+import charchat.html.pages.SignUpPage
 import charchat.plugins.AppSession
 import charchat.plugins.FORM_LOGIN_CONFIGURATION_NAME
 import charchat.plugins.FORM_LOGIN_PASSWORD_FIELD
@@ -79,30 +81,7 @@ fun Route.signInForm() {
 
 fun Route.signUpForm() {
     get<SignUp> {
-        call.respondPage {
-            content {
-                form(action = signUpURL, method = FormMethod.post) {
-                    label {
-                        +"Email"
-                        emailInput(name = FORM_LOGIN_EMAIL_FIELD) {
-                            placeholder = "gendalf@tatooine.rick"
-                            required = true
-                        }
-                    }
-
-                    label {
-                        +"Password"
-                        passwordInput(name = FORM_LOGIN_PASSWORD_FIELD) {
-                            required = true
-                        }
-                    }
-
-                    submitInput {
-                        value = "Sign Up"
-                    }
-                }
-            }
-        }
+        call.respondPage(SignUpPage())
     }
 }
 
@@ -157,4 +136,19 @@ suspend fun ApplicationCall.respondPage(block: Layout.() -> Unit) {
         ),
         body = block
     )
+}
+
+suspend fun ApplicationCall.respondPage(page: Page) {
+    val session = sessions.get<AppSession>()
+    val signInURL = application.href(SignIn)
+    val signUpURL = application.href(SignUp)
+    respondHtmlTemplate(
+        Layout(
+            signInURL = signInURL,
+            signUpURL = signUpURL,
+            appSession = session
+        )
+    ) {
+        insert(page) {}
+    }
 }
