@@ -1,0 +1,17 @@
+.chat {
+    overflow-y: auto;
+    height: 400px;
+    padding: 1%;
+}
+.message {
+    display: block;
+    border-radius: var(--border-radius);
+    background: var(--card-background-color);
+    padding: 1%;
+    margin: 1% 0;
+    box-shadow: var(--card-box-shadow);
+}
+
+.message header {
+   margin: 0 0 1% 0;
+}
