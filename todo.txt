@@ -1,5 +1,3 @@
-Change sign in button color
-Add 401 page
 Add logout
 Add password limitations on length
 Add interface for users

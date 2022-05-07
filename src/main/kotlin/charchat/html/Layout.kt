@@ -58,7 +58,7 @@ class Layout(
                     if (appSession == null) {
                         ul {
                             li {
-                                a(href = signInURL) {
+                                a(classes = "outline", href = signInURL) {
                                     role = "button"
                                     +"Sign in"
                                 }
