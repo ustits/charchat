@@ -4,6 +4,7 @@ import charchat.auth.PlaintextPassword
 import charchat.auth.SqliteUsers
 import charchat.auth.User
 import charchat.html.Layout
+import charchat.html.pages.MainPage
 import charchat.html.pages.Page
 import charchat.html.pages.SignInPage
 import charchat.html.pages.SignUpPage
@@ -22,7 +23,6 @@ import io.ktor.server.resources.post
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import kotlinx.html.h1
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -35,13 +35,7 @@ class SignUp(val userExists: Boolean? = null)
 
 fun Route.main() {
     get("/") {
-        call.respondPage {
-            content {
-                h1 {
-                    +"CharChat"
-                }
-            }
-        }
+        call.respondPage(MainPage())
     }
 }
 
@@ -94,20 +88,6 @@ fun Route.signUp() {
 private suspend fun ApplicationCall.setSessionAndRedirect(session: AppSession) {
     sessions.set(session)
     respondRedirect("/")
-}
-
-suspend fun ApplicationCall.respondPage(block: Layout.() -> Unit) {
-    val session = sessions.get<AppSession>()
-    val signInURL = application.href(SignIn())
-    val signUpURL = application.href(SignUp())
-    respondHtmlTemplate(
-        Layout(
-            signInURL = signInURL,
-            signUpURL = signUpURL,
-            appSession = session
-        ),
-        body = block
-    )
 }
 
 suspend fun ApplicationCall.respondPage(page: Page) {

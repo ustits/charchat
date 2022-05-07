@@ -1,5 +1,6 @@
 package charchat.plugins
 
+import charchat.html.pages.NotFoundPage
 import charchat.routes.signIn
 import charchat.routes.signInForm
 import charchat.routes.main
@@ -13,7 +14,6 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.resources.*
 import io.ktor.server.routing.*
 import io.ktor.server.webjars.*
-import kotlinx.html.p
 
 fun Application.configureRouting() {
     install(Resources) {
@@ -21,13 +21,7 @@ fun Application.configureRouting() {
 
     install(StatusPages) {
         status(HttpStatusCode.NotFound) { call, _ ->
-            call.respondPage {
-                content {
-                    p {
-                        +"There is nothing here"
-                    }
-                }
-            }
+            call.respondPage(NotFoundPage())
         }
     }
 
