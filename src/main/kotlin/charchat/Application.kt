@@ -16,8 +16,8 @@ fun main() {
 
     embeddedServer(Netty, port = cfg.server.port, host = "0.0.0.0") {
         configureDatabase(cfg.database)
-        configureAuth()
         configureRouting()
+        configureAuth()
         configureCallLogging()
         configureMetrics()
 

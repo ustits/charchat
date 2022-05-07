@@ -5,6 +5,7 @@ import charchat.auth.SqliteUsers
 import charchat.auth.User
 import charchat.html.Layout
 import charchat.html.pages.Page
+import charchat.html.pages.SignInPage
 import charchat.html.pages.SignUpPage
 import charchat.plugins.AppSession
 import charchat.plugins.FORM_LOGIN_CONFIGURATION_NAME
@@ -21,22 +22,16 @@ import io.ktor.server.resources.post
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import kotlinx.html.FormMethod
-import kotlinx.html.emailInput
-import kotlinx.html.form
 import kotlinx.html.h1
-import kotlinx.html.label
-import kotlinx.html.passwordInput
-import kotlinx.html.submitInput
 import kotlinx.serialization.Serializable
 
 @Serializable
 @Resource("/signIn")
-object SignIn
+class SignIn(val failed: Boolean? = null)
 
 @Serializable
 @Resource("/signUp")
-object SignUp
+class SignUp(val userExists: Boolean? = null)
 
 fun Route.main() {
     get("/") {
@@ -52,36 +47,13 @@ fun Route.main() {
 
 fun Route.signInForm() {
     get<SignIn> {
-        call.respondPage {
-            content {
-                form(action = signInURL, method = FormMethod.post) {
-                    label {
-                        +"Email"
-                        emailInput(name = FORM_LOGIN_EMAIL_FIELD) {
-                            placeholder = "gendalf@tatooine.rick"
-                            required = true
-                        }
-                    }
-
-                    label {
-                        +"Password"
-                        passwordInput(name = FORM_LOGIN_PASSWORD_FIELD) {
-                            required = true
-                        }
-                    }
-
-                    submitInput {
-                        value = "Sign In"
-                    }
-                }
-            }
-        }
+        call.respondPage(SignInPage(it))
     }
 }
 
 fun Route.signUpForm() {
     get<SignUp> {
-        call.respondPage(SignUpPage())
+        call.respondPage(SignUpPage(it))
     }
 }
 
@@ -110,8 +82,8 @@ fun Route.signUp() {
                 val session = AppSession(existingUser.id, existingUser.name)
                 call.setSessionAndRedirect(session)
             } else {
-                val signInURL = application.href(SignIn)
-                call.respondRedirect(signInURL)
+                val redirect = application.href(SignUp(userExists = true))
+                call.respondRedirect(redirect)
             }
         } else {
             throw BadRequestException("Email and password are required fields")
@@ -126,8 +98,8 @@ private suspend fun ApplicationCall.setSessionAndRedirect(session: AppSession) {
 
 suspend fun ApplicationCall.respondPage(block: Layout.() -> Unit) {
     val session = sessions.get<AppSession>()
-    val signInURL = application.href(SignIn)
-    val signUpURL = application.href(SignUp)
+    val signInURL = application.href(SignIn())
+    val signUpURL = application.href(SignUp())
     respondHtmlTemplate(
         Layout(
             signInURL = signInURL,
@@ -140,8 +112,8 @@ suspend fun ApplicationCall.respondPage(block: Layout.() -> Unit) {
 
 suspend fun ApplicationCall.respondPage(page: Page) {
     val session = sessions.get<AppSession>()
-    val signInURL = application.href(SignIn)
-    val signUpURL = application.href(SignUp)
+    val signInURL = application.href(SignIn())
+    val signUpURL = application.href(SignUp())
     respondHtmlTemplate(
         Layout(
             signInURL = signInURL,
