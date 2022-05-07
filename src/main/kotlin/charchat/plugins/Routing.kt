@@ -1,6 +1,7 @@
 package charchat.plugins
 
 import charchat.html.pages.NotFoundPage
+import charchat.routes.logout
 import charchat.routes.signIn
 import charchat.routes.signInForm
 import charchat.routes.main
@@ -35,6 +36,7 @@ fun Application.configureRouting() {
         signUp()
         signInForm()
         signUpForm()
+        logout()
 
         static("assets") {
             resources("js")

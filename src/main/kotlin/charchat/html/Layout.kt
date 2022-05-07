@@ -25,6 +25,7 @@ import kotlinx.html.ul
 class Layout(
     val signInURL: String,
     val signUpURL: String,
+    private val logoutURL: String,
     private val appSession: AppSession?
 ) : Template<HTML> {
 
@@ -55,8 +56,8 @@ class Layout(
                             }
                         }
                     }
-                    if (appSession == null) {
-                        ul {
+                    ul {
+                        if (appSession == null) {
                             li {
                                 a(classes = "outline", href = signInURL) {
                                     role = "button"
@@ -69,10 +70,21 @@ class Layout(
                                     +"Sign up"
                                 }
                             }
-                        }
-                    } else if (appSession.name != null && appSession.name.isNotBlank()) {
-                        p {
-                            +appSession.name
+                        } else {
+                            if (appSession.name != null && appSession.name.isNotBlank()) {
+                                li {
+                                    p {
+                                        +appSession.name
+                                    }
+                                }
+                            }
+                            li {
+                                a(classes = "secondary outline", href = logoutURL) {
+                                    role = "button"
+                                    +"Logout"
+                                }
+                            }
+
                         }
                     }
                 }

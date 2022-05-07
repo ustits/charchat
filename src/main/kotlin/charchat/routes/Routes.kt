@@ -33,6 +33,10 @@ class SignIn(val failed: Boolean? = null)
 @Resource("/signUp")
 class SignUp(val userExists: Boolean? = null)
 
+@Serializable
+@Resource("/logout")
+object Logout
+
 fun Route.main() {
     get("/") {
         call.respondPage(MainPage())
@@ -85,6 +89,13 @@ fun Route.signUp() {
     }
 }
 
+fun Route.logout() {
+    get<Logout> {
+        call.sessions.clear<AppSession>()
+        call.respondRedirect("/")
+    }
+}
+
 private suspend fun ApplicationCall.setSessionAndRedirect(session: AppSession) {
     sessions.set(session)
     respondRedirect("/")
@@ -94,10 +105,12 @@ suspend fun ApplicationCall.respondPage(page: Page) {
     val session = sessions.get<AppSession>()
     val signInURL = application.href(SignIn())
     val signUpURL = application.href(SignUp())
+    val logoutURL = application.href(Logout)
     respondHtmlTemplate(
         Layout(
             signInURL = signInURL,
             signUpURL = signUpURL,
+            logoutURL = logoutURL,
             appSession = session
         )
     ) {
