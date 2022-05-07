@@ -2,6 +2,7 @@ package charchat.plugins
 
 import charchat.AppDeps
 import charchat.html.pages.NotFoundPage
+import charchat.routes.wsChat
 import charchat.routes.logout
 import charchat.routes.signIn
 import charchat.routes.signInForm
@@ -16,6 +17,8 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.resources.*
 import io.ktor.server.routing.*
 import io.ktor.server.webjars.*
+import io.ktor.server.websocket.*
+import java.time.Duration
 
 fun Application.configureRouting(appDeps: AppDeps) {
     install(Resources) {
@@ -31,6 +34,13 @@ fun Application.configureRouting(appDeps: AppDeps) {
         path = "assets"
     }
 
+    install(WebSockets) {
+        pingPeriod = Duration.ofSeconds(15)
+        timeout = Duration.ofSeconds(15)
+        maxFrameSize = Long.MAX_VALUE
+        masking = false
+    }
+
     routing {
         main()
         signIn()
@@ -38,6 +48,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
         signInForm()
         signUpForm()
         logout()
+        wsChat()
 
         static("assets") {
             resources("js")

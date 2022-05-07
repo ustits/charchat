@@ -7,33 +7,39 @@ import kotlinx.html.div
 import kotlinx.html.form
 import kotlinx.html.h1
 import kotlinx.html.header
+import kotlinx.html.id
 import kotlinx.html.input
 import kotlinx.html.strong
 import kotlinx.html.textArea
 
-class Chat : Template<FlowContent> {
+class Chat(private val websocketURL: String) : Template<FlowContent> {
 
     var name: String = ""
-    val message = PlaceholderList<FlowContent, Message>()
 
     override fun FlowContent.apply() {
         h1 {
             +name
         }
+        div {
+            attributes["hx-ext"] = "ws"
+            attributes["ws-connect"] = websocketURL
+        }
         div("chat") {
-            each(message) {
-                insert(Message()) {
-                    insert(it)
-                }
+            div {
+                id = "messages"
             }
         }
         form {
-            textArea { }
+            attributes["ws-send"] = "true"
+            textArea {
+                name = "message"
+                disabled = true
+            }
             input(type = InputType.submit) {
+                disabled = true
             }
         }
     }
-
 
     class Message : Template<FlowContent> {
 
@@ -51,5 +57,4 @@ class Chat : Template<FlowContent> {
             }
         }
     }
-
 }

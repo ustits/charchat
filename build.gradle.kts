@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.ktor.serverMetricsMicrometer)
     implementation(libs.ktor.serverAuth)
     implementation(libs.ktor.serverSessions)
+    implementation(libs.ktor.serverWebsockets)
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.4")
 
