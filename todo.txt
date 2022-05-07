@@ -1,5 +1,5 @@
+Add chat form
 Add password limitations on length
-Add interface for users
 Add email validation
 Add random name generation for newly created user
 Add ability to change user name

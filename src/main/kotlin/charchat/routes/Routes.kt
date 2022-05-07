@@ -1,8 +1,8 @@
 package charchat.routes
 
 import charchat.auth.PlaintextPassword
-import charchat.auth.SqliteUsers
 import charchat.auth.User
+import charchat.auth.UserRepository
 import charchat.html.Layout
 import charchat.html.pages.MainPage
 import charchat.html.pages.Page
@@ -64,16 +64,15 @@ fun Route.signIn() {
     }
 }
 
-fun Route.signUp() {
+fun Route.signUp(userRepository: UserRepository) {
     post<SignUp> {
-        val users = SqliteUsers()
         val params = call.receiveParameters()
         val email = params[FORM_LOGIN_EMAIL_FIELD]
         val password = params[FORM_LOGIN_PASSWORD_FIELD]
         if (email != null && password != null) {
-            val existingUser = users.findByEmailOrNull(email)
+            val existingUser = userRepository.findByEmailOrNull(email)
             if (existingUser == null) {
-                val user = users.addOrUpdate(email, PlaintextPassword(password))
+                val user = userRepository.addOrUpdate(email, PlaintextPassword(password))
                 val session = AppSession(user.id, user.name)
                 call.setSessionAndRedirect(session)
             } else if (existingUser.hasSamePassword(password)) {

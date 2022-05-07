@@ -1,6 +1,6 @@
 package charchat.plugins
 
-import charchat.auth.SqliteUsers
+import charchat.AppDeps
 import charchat.routes.SignIn
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -12,18 +12,17 @@ const val FORM_LOGIN_CONFIGURATION_NAME = "form-auth"
 const val FORM_LOGIN_EMAIL_FIELD = "email"
 const val FORM_LOGIN_PASSWORD_FIELD = "password"
 
-fun Application.configureAuth() {
-    val sqliteUsers = SqliteUsers()
-
+fun Application.configureAuth(appDeps: AppDeps) {
     val failedAuthURL = href(SignIn(failed = true))
 
     install(Authentication) {
+        val userRepository = appDeps.userRepository()
         form(FORM_LOGIN_CONFIGURATION_NAME) {
             userParamName = FORM_LOGIN_EMAIL_FIELD
             passwordParamName = FORM_LOGIN_PASSWORD_FIELD
 
             validate { credentials ->
-                val user = sqliteUsers.findByEmailOrNull(credentials.name)
+                val user = userRepository.findByEmailOrNull(credentials.name)
                 if (user != null && user.hasSamePassword(credentials.password)) {
                     user
                 } else {

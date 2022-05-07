@@ -1,5 +1,6 @@
 package charchat.plugins
 
+import charchat.AppDeps
 import charchat.html.pages.NotFoundPage
 import charchat.routes.logout
 import charchat.routes.signIn
@@ -16,7 +17,7 @@ import io.ktor.server.resources.*
 import io.ktor.server.routing.*
 import io.ktor.server.webjars.*
 
-fun Application.configureRouting() {
+fun Application.configureRouting(appDeps: AppDeps) {
     install(Resources) {
     }
 
@@ -33,7 +34,7 @@ fun Application.configureRouting() {
     routing {
         main()
         signIn()
-        signUp()
+        signUp(appDeps.userRepository())
         signInForm()
         signUpForm()
         logout()

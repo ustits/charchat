@@ -5,9 +5,9 @@ import charchat.db.transaction
 import java.sql.Connection
 import java.sql.ResultSet
 
-class SqliteUsers {
+class SqliteUserRepository : UserRepository {
 
-    fun findByEmailOrNull(email: String): User? {
+    override fun findByEmailOrNull(email: String): User? {
         return transaction {
             val statement = prepareStatement("SELECT id, email, name, password FROM users WHERE email = ?")
             statement.setString(1, email)
@@ -19,7 +19,7 @@ class SqliteUsers {
         }
     }
 
-    fun addOrUpdate(email: String, password: Password): User {
+    override fun addOrUpdate(email: String, password: Password): User {
         return transaction {
             if (existsByEmail(email)) {
                 updateAndReturn(email, password.print())

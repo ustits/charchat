@@ -1,7 +1,7 @@
 package charchat
 
 import charchat.auth.PlaintextPassword
-import charchat.auth.SqliteUsers
+import charchat.auth.UserRepository
 import charchat.config.readConfiguration
 import charchat.db.configureDatabase
 import charchat.plugins.configureAuth
@@ -13,20 +13,20 @@ import io.ktor.server.netty.*
 
 fun main() {
     val cfg = readConfiguration()
+    val appDeps = AppDeps()
 
     embeddedServer(Netty, port = cfg.server.port, host = "0.0.0.0") {
         configureDatabase(cfg.database)
-        configureRouting()
-        configureAuth()
+        configureRouting(appDeps)
+        configureAuth(appDeps)
         configureCallLogging()
         configureMetrics()
 
-        populateTestUsers()
+        populateTestUsers(appDeps.userRepository())
     }.start(wait = true)
 }
 
-private fun populateTestUsers() {
-    val users = SqliteUsers()
+private fun populateTestUsers(userRepository: UserRepository) {
     mapOf(
         "ivan@ivan.dev" to "ivan",
         "peter@peter.dev" to "peter",
@@ -34,6 +34,6 @@ private fun populateTestUsers() {
         "andy@andy.dev" to "andy",
     ).forEach { (u, p) ->
         val password = PlaintextPassword(p)
-        users.addOrUpdate(u, password)
+        userRepository.addOrUpdate(u, password)
     }
 }
