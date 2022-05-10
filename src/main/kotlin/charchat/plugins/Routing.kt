@@ -11,6 +11,7 @@ import charchat.routes.respondPage
 import charchat.routes.signUp
 import charchat.routes.signUpForm
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.statuspages.*
@@ -18,6 +19,7 @@ import io.ktor.server.resources.*
 import io.ktor.server.routing.*
 import io.ktor.server.webjars.*
 import io.ktor.server.websocket.*
+import kotlinx.serialization.json.Json
 import java.time.Duration
 
 fun Application.configureRouting(appDeps: AppDeps) {
@@ -39,6 +41,8 @@ fun Application.configureRouting(appDeps: AppDeps) {
         timeout = Duration.ofSeconds(15)
         maxFrameSize = Long.MAX_VALUE
         masking = false
+
+        contentConverter = KotlinxWebsocketSerializationConverter(Json)
     }
 
     routing {

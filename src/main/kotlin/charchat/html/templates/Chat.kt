@@ -23,20 +23,18 @@ class Chat(private val websocketURL: String) : Template<FlowContent> {
         div {
             attributes["hx-ext"] = "ws"
             attributes["ws-connect"] = websocketURL
-        }
-        div("chat") {
-            div {
-                id = "messages"
+            div("chat") {
+                div {
+                    id = "messages"
+                }
             }
-        }
-        form {
-            attributes["ws-send"] = "true"
-            textArea {
-                name = "message"
-                disabled = true
-            }
-            input(type = InputType.submit) {
-                disabled = true
+            form {
+                attributes["ws-send"] = ""
+                textArea {
+                    name = "message"
+                    required = true
+                }
+                input(type = InputType.submit)
             }
         }
     }

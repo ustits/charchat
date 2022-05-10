@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.ktor.serverCore)
     implementation(libs.ktor.serverHostCommon)
     implementation(libs.ktor.serverNetty)
-    implementation(libs.ktor.serialization)
+    implementation(libs.ktor.serializationJson)
     implementation(libs.ktor.serverResources)
     implementation(libs.ktor.serverWebjars)
     implementation(libs.ktor.serverHtmlBuilder)

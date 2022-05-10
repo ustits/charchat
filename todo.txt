@@ -1,4 +1,6 @@
-Add chat form
+Don't receive and send empty messages
+Empty send form after message send
+Scroll to bottom of chat after receiving new message
 Add password limitations on length
 Add email validation
 Add random name generation for newly created user

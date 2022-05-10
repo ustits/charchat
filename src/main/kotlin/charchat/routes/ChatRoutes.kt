@@ -1,11 +1,14 @@
 package charchat.routes
 
 import charchat.html.templates.Chat
+import charchat.plugins.AppSession
 import io.ktor.server.application.*
 import io.ktor.server.html.*
 import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.html.div
@@ -29,23 +32,16 @@ fun Route.wsChat() {
             }
         }
 
-        try {
-            handleMessages()
-        } catch (e: Throwable) {
-            application.log.error("Channel was closed with reason: ${closeReason.await()}")
-        }
-    }
-}
-
-private suspend fun DefaultWebSocketServerSession.handleMessages() {
-    for (frame in incoming) {
-        when (frame) {
-            is Frame.Text -> {
-                val receivedText = frame.readText()
-                application.log.debug("Received text frame: $receivedText")
-            }
-            else -> {
-                error("Frame $frame not implemented")
+        while (true) {
+            try {
+                val session = call.sessions.get<AppSession>()
+                val wsMessage = receiveDeserialized<HTMXWsMessage>()
+                application.log.debug("Received text frame: ${wsMessage.message}, for userID: ${session?.userID ?: "anonymous"}")
+                val toSend = Message(sender = "Кука Кук", text = wsMessage.message)
+                send(toSend.toHtml())
+            } catch (e: ClosedReceiveChannelException) {
+                application.log.error("Channel was closed with reason: ${closeReason.await()}")
+                break
             }
         }
     }

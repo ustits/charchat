@@ -43,8 +43,7 @@ class Layout(
             link(rel = "stylesheet", href = "/assets/pico/css/pico.min.css")
             link(rel = "stylesheet", href = "/assets/charchat.css")
             script { src = "/assets/htmx.org/htmx.min.js" }
-            script { src = "/assets/htmx.org/ext/ws.js" }
-            script { src = "/assets/hyperscript.org/_hyperscript_web.min.js" }
+            script { src = "/assets/ws-ext.js" }
         }
         body {
             div("container-fluid") {
