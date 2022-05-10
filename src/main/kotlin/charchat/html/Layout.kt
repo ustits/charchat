@@ -44,6 +44,7 @@ class Layout(
             link(rel = "stylesheet", href = "/assets/charchat.css")
             script { src = "/assets/htmx.org/htmx.min.js" }
             script { src = "/assets/ws-ext.js" }
+            script { src = "/assets/hyperscript.org/_hyperscript_web.min.js" }
         }
         body {
             div("container-fluid") {

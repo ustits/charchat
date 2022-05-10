@@ -1,6 +1,6 @@
 Don't receive and send empty messages
-Empty send form after message send
-Scroll to bottom of chat after receiving new message
+Send message by Enter button
+Multiline input with Shift+Enter
 Add password limitations on length
 Add email validation
 Add random name generation for newly created user
