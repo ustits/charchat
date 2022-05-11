@@ -1,0 +1,67 @@
+@startuml
+!define LIGHTRED
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+
+class Campaign {
+    +dungeonMaster: User[1]
+    +name: String[1]
+}
+
+class Party {
+    +addCharacter(Character)
+    +deleteCharacter(Character)
+    +startDialog(): Dialog
+}
+
+class Invite {
+    +url: URL[1]
+    +addToParty(Character)
+}
+
+class Character {
+    +name: String[1]
+}
+
+note right of Character::say
+  Looks strange, where does he say?
+  In what dialog?
+end note
+
+class User {
+    +name: String[1]
+    +createCampaign(): Campaign
+    +joinParty(Invite, Character)
+}
+
+note right of User::createCampaign
+    Creates campaing and becomes DM
+end note
+
+class Dialog {
+    +addMessage(Message)
+}
+
+class Message {
+    +sender: String[1]
+    +text: String[1]
+}
+
+User "1" --> "*" Campaign : +campaigns
+User "1" --> "*" Character : +characters
+
+Campaign "1" --> "1" Invite : +invite
+Campaign "1" --> "1" Party : +party
+
+Invite "1" --> Party : -party
+
+Party "1" --> "*" Dialog : +dialogs
+Party "1" --> "*" Character : +characters
+
+Character "*" <--> "*" Dialog : +dialogs
+
+Dialog "1" --> "*" Message : +messages
+
+User ..> Invite
+
+
+@enduml

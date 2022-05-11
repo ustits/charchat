@@ -1,7 +1,20 @@
-Don't receive and send empty messages
-Send message by Enter button
-Multiline input with Shift+Enter
+Add class diagram implementation
+Add adapters layer
+Add character creation form
+Add campaign list on main page with separation on DM and Player
+Add campaign creation form
+Add campaign invite link with hash id url generation (store in db, would be nice for link regeneration)
+Add campaign invite form where user can select character
+Add campaign page with chat form
+Add ability for player to choose character via whom he wants to write a message
+Add ability for players to write via there characters
+Add ability for DM to delete characters
+Add another scroll to down logic. CSS trick not working in mobile safari
+Add ability for invite link regeneration
+Add empty string filter on message send
+Remove send message via Enter button
+Add multiline input via Shift+Enter in chat
 Add password limitations on length
-Add email validation
+Add email validation on registration page
 Add random name generation for newly created user
 Add ability to change user name
