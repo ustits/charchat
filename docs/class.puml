@@ -2,66 +2,55 @@
 !define LIGHTRED
 !includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
 
-class Campaign {
-    +dungeonMaster: User[1]
-    +name: String[1]
-}
-
-class Party {
-    +addCharacter(Character)
-    +deleteCharacter(Character)
-    +startDialog(): Dialog
-}
-
-class Invite {
-    +url: URL[1]
-    +addToParty(Character)
-}
-
-class Character {
-    +name: String[1]
-}
-
-note right of Character::say
-  Looks strange, where does he say?
-  In what dialog?
-end note
-
 class User {
     +name: String[1]
     +createCampaign(): Campaign
-    +joinParty(Invite, Character)
+    +joinParty(Invite)
 }
 
 note right of User::createCampaign
     Creates campaing and becomes DM
 end note
 
-class Dialog {
-    +addMessage(Message)
+class Campaign {
+    +dungeonMaster: User[1]
+    +name: String[1]
+    +startScene(): Scene
+    +addCharacter(Character)
+    +deleteCharacter(Character)
 }
 
-class Message {
-    +sender: String[1]
+class Invite {
+    +url: URL[1]
+    +addToCampaign(Character)
+}
+
+class Character {
+    +name: String[1]
+}
+
+class Scene {
+    +addAction(Action)
+}
+
+class Action {
     +text: String[1]
+    +character: Character[1]
+    +type: ActionType[1]
 }
 
-User "1" --> "*" Campaign : +campaigns
-User "1" --> "*" Character : +characters
+User "1" --> "0..*" Campaign : +campaigns
+User "1" --> "0..*" Character : +characters
 
-Campaign "1" --> "1" Invite : +invite
-Campaign "1" --> "1" Party : +party
+Campaign "1" <--> "1" Invite : +invite
 
-Invite "1" --> Party : -party
+Campaign "1" --> "0..*" Scene : +scenes
+Campaign "1" --> "0..*" Character : +characters
 
-Party "1" --> "*" Dialog : +dialogs
-Party "1" --> "*" Character : +characters
-
-Character "*" <--> "*" Dialog : +dialogs
-
-Dialog "1" --> "*" Message : +messages
+Character "1..*" <--> "0..*" Scene : +scenes
 
 User ..> Invite
 
+Scene "1" --> "0..*" Action : actions
 
 @enduml
