@@ -2,6 +2,7 @@ package charchat.plugins
 
 import charchat.AppDeps
 import charchat.html.pages.NotFoundPage
+import charchat.routes.createCampaign
 import charchat.routes.wsChat
 import charchat.routes.logout
 import charchat.routes.signIn
@@ -53,6 +54,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
         signUpForm()
         logout()
         wsChat()
+        createCampaign(appDeps.userRepository())
 
         static("assets") {
             resources("js")

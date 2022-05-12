@@ -26,7 +26,7 @@ class Layout(
     val signInURL: String,
     val signUpURL: String,
     private val logoutURL: String,
-    private val appSession: AppSession?
+    val appSession: AppSession?
 ) : Template<HTML> {
 
     val content = Placeholder<FlowContent>()

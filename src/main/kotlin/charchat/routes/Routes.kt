@@ -38,8 +38,13 @@ class SignUp(val userExists: Boolean? = null)
 object Logout
 
 fun Route.main() {
+    val createCampaignURL = application.href(CampaignResource)
     get("/") {
-        call.respondPage(MainPage())
+        call.respondPage(
+            MainPage(
+                createCampaignURL = createCampaignURL
+            )
+        )
     }
 }
 
