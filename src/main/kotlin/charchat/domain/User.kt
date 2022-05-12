@@ -11,8 +11,12 @@ class User(
         return campaignFactory.create(this, "tmp")
     }
 
+    fun createCharacter(): Character {
+        return characterFactory.create("tmp")
+    }
+
     fun joinParty(invite: Invite) {
-        val char = characterFactory.create(this, "tmp")
+        val char = createCharacter()
         invite.addToCampaign(char)
     }
 

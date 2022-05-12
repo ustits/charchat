@@ -1,7 +1,7 @@
 package charchat
 
 import charchat.auth.PlaintextPassword
-import charchat.auth.UserRepository
+import charchat.auth.UserPrincipalRepository
 import charchat.config.readConfiguration
 import charchat.db.configureDatabase
 import charchat.plugins.configureAuth
@@ -22,11 +22,11 @@ fun main() {
         configureCallLogging()
         configureMetrics()
 
-        populateTestUsers(appDeps.userRepository())
+        populateTestUsers(appDeps.userPrincipalRepository())
     }.start(wait = true)
 }
 
-private fun populateTestUsers(userRepository: UserRepository) {
+private fun populateTestUsers(userPrincipalRepository: UserPrincipalRepository) {
     mapOf(
         "ivan@ivan.dev" to "ivan",
         "peter@peter.dev" to "peter",
@@ -34,6 +34,6 @@ private fun populateTestUsers(userRepository: UserRepository) {
         "andy@andy.dev" to "andy",
     ).forEach { (u, p) ->
         val password = PlaintextPassword(p)
-        userRepository.addOrUpdate(u, password)
+        userPrincipalRepository.addOrUpdate(u, password)
     }
 }

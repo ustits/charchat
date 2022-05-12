@@ -5,10 +5,12 @@ import charchat.routes.SignIn
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.resources.*
+import io.ktor.server.response.*
 import io.ktor.server.sessions.*
 import kotlin.time.Duration
 
 const val FORM_LOGIN_CONFIGURATION_NAME = "form-auth"
+const val SESSION_LOGIN_CONFIGURATION_NAME = "session-auth"
 const val FORM_LOGIN_EMAIL_FIELD = "email"
 const val FORM_LOGIN_PASSWORD_FIELD = "password"
 
@@ -16,7 +18,7 @@ fun Application.configureAuth(appDeps: AppDeps) {
     val failedAuthURL = href(SignIn(failed = true))
 
     install(Authentication) {
-        val userRepository = appDeps.userRepository()
+        val userRepository = appDeps.userPrincipalRepository()
         form(FORM_LOGIN_CONFIGURATION_NAME) {
             userParamName = FORM_LOGIN_EMAIL_FIELD
             passwordParamName = FORM_LOGIN_PASSWORD_FIELD
@@ -30,6 +32,14 @@ fun Application.configureAuth(appDeps: AppDeps) {
                 }
             }
             challenge(failedAuthURL)
+        }
+        session<AppSession>(SESSION_LOGIN_CONFIGURATION_NAME) {
+            validate {
+                it
+            }
+            challenge {
+                call.respondRedirect("/")
+            }
         }
     }
 

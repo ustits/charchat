@@ -5,6 +5,7 @@
 class User {
     +name: String[1]
     +createCampaign(): Campaign
+    +createCharacter(): Character
     +joinParty(Invite)
 }
 

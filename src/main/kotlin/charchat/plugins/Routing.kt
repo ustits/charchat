@@ -48,7 +48,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
     routing {
         main()
         signIn()
-        signUp(appDeps.userRepository())
+        signUp(appDeps.userPrincipalRepository())
         signInForm()
         signUpForm()
         logout()

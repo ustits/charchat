@@ -5,9 +5,9 @@ import charchat.db.transaction
 import java.sql.Connection
 import java.sql.ResultSet
 
-class SqliteUserRepository : UserRepository {
+class SqliteUserPrincipalRepository : UserPrincipalRepository {
 
-    override fun findByEmailOrNull(email: String): User? {
+    override fun findByEmailOrNull(email: String): UserPrincipal? {
         return transaction {
             val statement = prepareStatement("SELECT id, email, name, password FROM users WHERE email = ?")
             statement.setString(1, email)
@@ -19,7 +19,7 @@ class SqliteUserRepository : UserRepository {
         }
     }
 
-    override fun addOrUpdate(email: String, password: Password): User {
+    override fun addOrUpdate(email: String, password: Password): UserPrincipal {
         return transaction {
             if (existsByEmail(email)) {
                 updateAndReturn(email, password.print())
@@ -29,7 +29,7 @@ class SqliteUserRepository : UserRepository {
         }
     }
 
-    private fun Connection.add(email: String, password: String): User {
+    private fun Connection.add(email: String, password: String): UserPrincipal {
         val statement = prepareStatement("""
             INSERT INTO users (email, password) VALUES (?, ?) 
             RETURNING id, email, name, password
@@ -53,7 +53,7 @@ class SqliteUserRepository : UserRepository {
         return count > 0
     }
 
-    private fun Connection.updateAndReturn(email: String, password: String): User {
+    private fun Connection.updateAndReturn(email: String, password: String): UserPrincipal {
         val statement = prepareStatement("""
             UPDATE users SET password = ? 
             WHERE email = ?
@@ -68,8 +68,8 @@ class SqliteUserRepository : UserRepository {
         return user
     }
 
-    private fun toUser(rs: ResultSet): User {
-        return User(
+    private fun toUser(rs: ResultSet): UserPrincipal {
+        return UserPrincipal(
             id = rs.getInt("id"),
             email = rs.getString("email"),
             name = rs.getString("name"),

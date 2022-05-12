@@ -1,8 +1,8 @@
 package charchat.routes
 
 import charchat.auth.PlaintextPassword
-import charchat.auth.User
-import charchat.auth.UserRepository
+import charchat.auth.UserPrincipal
+import charchat.auth.UserPrincipalRepository
 import charchat.html.Layout
 import charchat.html.pages.MainPage
 import charchat.html.pages.Page
@@ -58,21 +58,21 @@ fun Route.signUpForm() {
 fun Route.signIn() {
     authenticate(FORM_LOGIN_CONFIGURATION_NAME) {
         post<SignIn> {
-            val principal = call.principal<User>()!!
+            val principal = call.principal<UserPrincipal>()!!
             call.setSessionAndRedirect(principal.toAppSession())
         }
     }
 }
 
-fun Route.signUp(userRepository: UserRepository) {
+fun Route.signUp(userPrincipalRepository: UserPrincipalRepository) {
     post<SignUp> {
         val params = call.receiveParameters()
         val email = params[FORM_LOGIN_EMAIL_FIELD]
         val password = params[FORM_LOGIN_PASSWORD_FIELD]
         if (email != null && password != null) {
-            val existingUser = userRepository.findByEmailOrNull(email)
+            val existingUser = userPrincipalRepository.findByEmailOrNull(email)
             if (existingUser == null) {
-                val user = userRepository.addOrUpdate(email, PlaintextPassword(password))
+                val user = userPrincipalRepository.addOrUpdate(email, PlaintextPassword(password))
                 val session = AppSession(user.id, user.name)
                 call.setSessionAndRedirect(session)
             } else if (existingUser.hasSamePassword(password)) {

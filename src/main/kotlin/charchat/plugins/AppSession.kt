@@ -1,3 +1,5 @@
 package charchat.plugins
 
-data class AppSession(val userID: Int, val name: String?)
+import io.ktor.server.auth.*
+
+data class AppSession(val userID: Int, val name: String?) : Principal
