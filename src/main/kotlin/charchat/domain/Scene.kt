@@ -2,7 +2,11 @@ package charchat.domain
 
 class Scene {
 
-    fun addAction(action: Action) {
+    fun addEvent(event: Event) {
+        TODO()
+    }
+
+    fun addCharacter(character: Character) {
         TODO()
     }
 

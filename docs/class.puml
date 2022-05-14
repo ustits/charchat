@@ -28,15 +28,21 @@ class Invite {
 
 class Character {
     +name: String[1]
+    +plus(Action): Event
 }
 
 class Scene {
-    +addAction(Action)
+    +addEvent(Event)
+    +addCharacter(Character)
 }
+
+class Event
+class ActionEvent
+class WorldEvent
 
 class Action {
     +text: String[1]
-    +character: Character[1]
+    +actor: Character[1]
     +type: ActionType[1]
 }
 
@@ -49,9 +55,16 @@ Campaign "1" --> "0..*" Scene : +scenes
 Campaign "1" --> "0..*" Character : +characters
 
 Character "1..*" <--> "0..*" Scene : +scenes
+Character ..> Event
+Character ..> Action
 
 User ..> Invite
 
-Scene "1" --> "0..*" Action : actions
+Scene "1" --> "*" Event : +events
+
+ActionEvent --|> Event
+WorldEvent --|> Event
+
+ActionEvent "1" --> "1" Action
 
 @enduml
