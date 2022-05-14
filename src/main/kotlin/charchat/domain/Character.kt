@@ -1,4 +1,4 @@
 package charchat.domain
 
-class Character(val name: String) {
+class Character(val id: ID, val name: String) {
 }

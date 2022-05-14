@@ -1,6 +1,6 @@
 package charchat.domain
 
-class Scene {
+class Scene(val id: ID) {
 
     fun addEvent(event: Event) {
         TODO()

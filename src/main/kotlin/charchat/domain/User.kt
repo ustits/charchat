@@ -12,7 +12,7 @@ class User(
     }
 
     fun createCharacter(): Character {
-        return characterFactory.create("tmp")
+        return characterFactory.create(this, "tmp")
     }
 
     fun joinParty(invite: Invite) {

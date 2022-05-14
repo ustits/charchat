@@ -1,6 +1,11 @@
 package charchat.domain
 
-class Campaign(val id: ID, val dungeonMaster: User, val name: String) {
+class Campaign(
+    val id: ID,
+    val dungeonMaster: User,
+    val name: String,
+    private val sceneFactory: SceneFactory
+) {
 
     fun addCharacter(character: Character) {
         TODO()
@@ -11,7 +16,7 @@ class Campaign(val id: ID, val dungeonMaster: User, val name: String) {
     }
 
     fun startScene(): Scene {
-        TODO()
+        return sceneFactory.create(this, "tmp")
     }
 
 }

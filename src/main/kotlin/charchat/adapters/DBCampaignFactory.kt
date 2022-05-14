@@ -5,9 +5,10 @@ import charchat.db.transaction
 import charchat.domain.Campaign
 import charchat.domain.CampaignFactory
 import charchat.domain.ID
+import charchat.domain.SceneFactory
 import charchat.domain.User
 
-class DBCampaignFactory : CampaignFactory {
+class DBCampaignFactory(private val sceneFactory: SceneFactory) : CampaignFactory {
 
     override fun create(dm: User, name: String): Campaign {
         return transaction {
@@ -22,7 +23,8 @@ class DBCampaignFactory : CampaignFactory {
                 Campaign(
                     id = ID(getInt(1)),
                     dungeonMaster = dm,
-                    name = getString(2)
+                    name = getString(2),
+                    sceneFactory = sceneFactory
                 )
             }.first()
             statement.close()
