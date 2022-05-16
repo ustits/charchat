@@ -19,6 +19,6 @@ CREATE INDEX scenes_campaign_index ON scenes(campaign);
 CREATE TABLE scene_characters(
     scene INTEGER UNIQUE,
     character INTEGER NOT NULL
-)
+);
 
 CREATE INDEX scene_characters_player_index ON scene_characters(character);

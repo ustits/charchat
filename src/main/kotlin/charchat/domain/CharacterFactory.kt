@@ -2,6 +2,6 @@ package charchat.domain
 
 interface CharacterFactory {
 
-    fun create(user: User, name: String): Character
+    fun create(user: User, characterSpec: CharacterSpec): Character
 
 }

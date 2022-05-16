@@ -5,9 +5,14 @@ import charchat.html.templates.Chat
 import io.ktor.server.html.*
 import kotlinx.html.FormMethod
 import kotlinx.html.form
+import kotlinx.html.label
 import kotlinx.html.submitInput
+import kotlinx.html.textInput
 
-class MainPage(private val createCampaignURL: String) : Page {
+class MainPage(
+    private val createCampaignURL: String,
+    private val createCharacterURL: String
+) : Page {
 
     override fun Layout.apply() {
         content {
@@ -17,9 +22,19 @@ class MainPage(private val createCampaignURL: String) : Page {
                         value = "Create campaign"
                     }
                 }
+                form(action = createCharacterURL, method = FormMethod.post) {
+                    label {
+                        +"Character name"
+                        textInput(name = "name")
+                    }
+
+                    submitInput {
+                        value = "Create character"
+                    }
+                }
             }
             insert(Chat("/chat")) {
-                name ="Example chat"
+                name = "Example chat"
             }
         }
     }

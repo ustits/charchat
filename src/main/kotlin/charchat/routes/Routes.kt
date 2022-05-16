@@ -39,10 +39,12 @@ object Logout
 
 fun Route.main() {
     val createCampaignURL = application.href(CampaignResource)
+    val createCharacterURL = application.href(CharacterResource())
     get("/") {
         call.respondPage(
             MainPage(
-                createCampaignURL = createCampaignURL
+                createCampaignURL = createCampaignURL,
+                createCharacterURL = createCharacterURL
             )
         )
     }
