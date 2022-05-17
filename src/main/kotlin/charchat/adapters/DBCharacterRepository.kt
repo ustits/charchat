@@ -10,29 +10,49 @@ import java.sql.ResultSet
 class DBCharacterRepository : CharacterRepository {
 
     override fun findByID(id: ID): Character? {
-        return transaction {
-            val statement = prepareStatement(
-                """
+        return findAllByIDAndStatement(
+            id,
+            """
                 SELECT id, name FROM characters
                 WHERE id = ?
             """.trimIndent()
-            )
-            statement.setInt(1, id.value)
-            val character = statement.executeQuery().toSequence {
-                toCharacter()
-            }.firstOrNull()
-            statement.close()
-            character
-        }
+        ).firstOrNull()
     }
 
     override fun findByUserID(userID: ID): List<Character> {
-        return transaction {
-            val statement = prepareStatement("""
+        return findAllByIDAndStatement(
+            userID,
+            """
                 SELECT id, name FROM characters
                 WHERE player = ?
-            """.trimIndent())
-            statement.setInt(1, userID.value)
+            """.trimIndent()
+        )
+    }
+
+    override fun findByCampaignID(campaignID: ID): List<Character> {
+        return findAllByIDAndStatement(
+            campaignID,
+            """
+                SELECT characters.id, characters.name FROM characters, campaign_characters
+                WHERE campaign_characters.campaign = ? 
+            """.trimIndent()
+        )
+    }
+
+    override fun findBySceneID(sceneID: ID): List<Character> {
+        return findAllByIDAndStatement(
+            sceneID,
+            """
+                SELECT characters.id, characters.name FROM characters, scene_characters
+                WHERE scene_characters.scene = ? 
+            """.trimIndent()
+        )
+    }
+
+    private fun findAllByIDAndStatement(id: ID, sql: String): List<Character> {
+        return transaction {
+            val statement = prepareStatement(sql)
+            statement.setInt(1, id.value)
             val chars = statement.executeQuery().toSequence {
                 toCharacter()
             }.toList()
