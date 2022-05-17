@@ -9,7 +9,7 @@ class Campaign(
 ) {
 
     fun characters(): List<Character> {
-        return characterRepository.findByCampaignID(id)
+        return characterRepository.findByCampaign(this)
     }
 
     fun addCharacter(character: Character) {

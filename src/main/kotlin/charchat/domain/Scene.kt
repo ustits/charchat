@@ -3,7 +3,7 @@ package charchat.domain
 class Scene(val id: ID, private val characterRepository: CharacterRepository) {
 
     fun characters(): List<Character> {
-        return characterRepository.findBySceneID(id)
+        return characterRepository.findByScene(this)
     }
 
     fun addEvent(event: Event) {

@@ -2,9 +2,12 @@ package charchat.adapters
 
 import charchat.db.toSequence
 import charchat.db.transaction
+import charchat.domain.Campaign
 import charchat.domain.Character
 import charchat.domain.CharacterRepository
 import charchat.domain.ID
+import charchat.domain.Scene
+import charchat.domain.User
 import java.sql.ResultSet
 
 class DBCharacterRepository : CharacterRepository {
@@ -19,9 +22,9 @@ class DBCharacterRepository : CharacterRepository {
         ).firstOrNull()
     }
 
-    override fun findByUserID(userID: ID): List<Character> {
+    override fun findByUser(user: User): List<Character> {
         return findAllByIDAndStatement(
-            userID,
+            user.id,
             """
                 SELECT id, name FROM characters
                 WHERE player = ?
@@ -29,9 +32,9 @@ class DBCharacterRepository : CharacterRepository {
         )
     }
 
-    override fun findByCampaignID(campaignID: ID): List<Character> {
+    override fun findByCampaign(campaign: Campaign): List<Character> {
         return findAllByIDAndStatement(
-            campaignID,
+            campaign.id,
             """
                 SELECT characters.id, characters.name FROM characters, campaign_characters
                 WHERE campaign_characters.campaign = ? 
@@ -39,9 +42,9 @@ class DBCharacterRepository : CharacterRepository {
         )
     }
 
-    override fun findBySceneID(sceneID: ID): List<Character> {
+    override fun findByScene(scene: Scene): List<Character> {
         return findAllByIDAndStatement(
-            sceneID,
+            scene.id,
             """
                 SELECT characters.id, characters.name FROM characters, scene_characters
                 WHERE scene_characters.scene = ? 

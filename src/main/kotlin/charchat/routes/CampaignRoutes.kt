@@ -29,7 +29,7 @@ fun Route.createCampaign(userRepository: UserRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         post<CampaignResource> {
             val session = call.principal<AppSession>()!!
-            val user = userRepository.findByIDOrNull(ID(session.userID))!!
+            val user = userRepository.findByID(ID(session.userID))!!
             val campaign = user.createCampaign()
             val redirect = application.href(CampaignResource.ByID(id = campaign.id.value))
             call.respondRedirect(redirect)
@@ -41,7 +41,7 @@ fun Route.campaignPage(userRepository: UserRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         get<CampaignResource.ByID> { resource ->
             val session = call.principal<AppSession>()!!
-            val user = userRepository.findByIDOrNull(ID(session.userID))!!
+            val user = userRepository.findByID(ID(session.userID))!!
             val campaign = user.campaigns().firstOrNull { campaign ->
                 campaign.id.value == resource.id
             }

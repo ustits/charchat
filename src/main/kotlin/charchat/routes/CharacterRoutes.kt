@@ -32,7 +32,7 @@ fun Route.createCharacter(userRepository: UserRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         post<CharacterResource> {
             val session = call.principal<AppSession>()!!
-            val user = userRepository.findByIDOrNull(ID(session.userID))!!
+            val user = userRepository.findByID(ID(session.userID))!!
             val params = call.receiveParameters()
             val charSpec = parseCharacterSpec(params)
             val character = user.createCharacter(charSpec)
@@ -46,7 +46,7 @@ fun Route.characterPage(userRepository: UserRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         get<CharacterResource.Page> { resource ->
             val session = call.principal<AppSession>()!!
-            val user = userRepository.findByIDOrNull(ID(session.userID))!!
+            val user = userRepository.findByID(ID(session.userID))!!
             val character = user.characters().firstOrNull { char ->
                 char.id == ID(resource.id)
             }

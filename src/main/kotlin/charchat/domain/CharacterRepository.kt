@@ -4,10 +4,10 @@ interface CharacterRepository {
 
     fun findByID(id: ID): Character?
 
-    fun findByUserID(userID: ID): List<Character>
+    fun findByUser(user: User): List<Character>
 
-    fun findByCampaignID(campaignID: ID): List<Character>
+    fun findByCampaign(campaign: Campaign): List<Character>
 
-    fun findBySceneID(sceneID: ID): List<Character>
+    fun findByScene(scene: Scene): List<Character>
 
 }

@@ -17,7 +17,7 @@ class DBUserRepository(
     private val characterRepository: CharacterRepository
 ) : UserRepository {
 
-    override fun findByIDOrNull(id: ID): User? {
+    override fun findByID(id: ID): User? {
         return transaction {
             val statement = prepareStatement("""
                 SELECT name FROM users WHERE id = ?
