@@ -3,11 +3,12 @@ package charchat.adapters
 import charchat.db.toSequence
 import charchat.db.transaction
 import charchat.domain.Campaign
+import charchat.domain.CharacterRepository
 import charchat.domain.ID
 import charchat.domain.Scene
 import charchat.domain.SceneFactory
 
-class DBSceneFactory : SceneFactory {
+class DBSceneFactory(private val characterRepository: CharacterRepository) : SceneFactory {
 
     override fun create(campaign: Campaign, name: String): Scene {
         return transaction {
@@ -23,7 +24,8 @@ class DBSceneFactory : SceneFactory {
             }.first()
             statement.close()
             Scene(
-                id = ID(id)
+                id = ID(id),
+                characterRepository = characterRepository
             )
         }
     }

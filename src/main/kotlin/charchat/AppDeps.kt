@@ -19,7 +19,9 @@ class AppDeps {
 
     private val characterFactory: CharacterFactory = DBCharacterFactory()
     private val characterRepository: CharacterRepository = DBCharacterRepository()
-    private val sceneFactory: SceneFactory = DBSceneFactory()
+    private val sceneFactory: SceneFactory = DBSceneFactory(
+        characterRepository = characterRepository
+    )
     private val campaignFactory: CampaignFactory = DBCampaignFactory(
         sceneFactory = sceneFactory,
         characterRepository = characterRepository
