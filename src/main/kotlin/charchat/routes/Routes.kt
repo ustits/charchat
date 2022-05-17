@@ -4,7 +4,8 @@ import charchat.auth.PlaintextPassword
 import charchat.auth.UserPrincipal
 import charchat.auth.UserPrincipalRepository
 import charchat.html.Layout
-import charchat.html.pages.MainPage
+import charchat.html.pages.MainPageForUser
+import charchat.html.pages.MainPageForGuest
 import charchat.html.pages.Page
 import charchat.html.pages.SignInPage
 import charchat.html.pages.SignUpPage
@@ -41,12 +42,17 @@ fun Route.main() {
     val createCampaignURL = application.href(CampaignResource)
     val createCharacterURL = application.href(CharacterResource())
     get("/") {
-        call.respondPage(
-            MainPage(
-                createCampaignURL = createCampaignURL,
-                createCharacterURL = createCharacterURL
+        val session = call.sessions.get<AppSession>()
+        if (session == null) {
+            call.respondPage(MainPageForGuest())
+        } else {
+            call.respondPage(
+                MainPageForUser(
+                    createCampaignURL = createCampaignURL,
+                    createCharacterURL = createCharacterURL
+                )
             )
-        )
+        }
     }
 }
 
