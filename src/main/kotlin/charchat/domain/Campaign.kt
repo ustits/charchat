@@ -4,8 +4,13 @@ class Campaign(
     val id: ID,
     val dungeonMaster: User,
     val name: String,
-    private val sceneFactory: SceneFactory
+    private val sceneFactory: SceneFactory,
+    private val characterRepository: CharacterRepository
 ) {
+
+    fun characters(): List<Character> {
+        return characterRepository.findByCampaignID(id)
+    }
 
     fun addCharacter(character: Character) {
         TODO()

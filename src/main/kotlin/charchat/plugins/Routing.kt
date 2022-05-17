@@ -2,6 +2,7 @@ package charchat.plugins
 
 import charchat.AppDeps
 import charchat.html.pages.NotFoundPage
+import charchat.routes.campaignPage
 import charchat.routes.characterPage
 import charchat.routes.createCampaign
 import charchat.routes.createCharacter
@@ -57,6 +58,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
         logout()
         wsChat()
         createCampaign(appDeps.userRepository())
+        campaignPage(appDeps.userRepository())
         createCharacter(appDeps.userRepository())
         characterPage(appDeps.userRepository())
 

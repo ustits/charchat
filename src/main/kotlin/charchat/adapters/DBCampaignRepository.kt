@@ -3,39 +3,37 @@ package charchat.adapters
 import charchat.db.toSequence
 import charchat.db.transaction
 import charchat.domain.Campaign
-import charchat.domain.CampaignFactory
+import charchat.domain.CampaignRepository
 import charchat.domain.CharacterRepository
 import charchat.domain.ID
 import charchat.domain.SceneFactory
 import charchat.domain.User
 
-class DBCampaignFactory(
+class DBCampaignRepository(
     private val sceneFactory: SceneFactory,
     private val characterRepository: CharacterRepository
-) : CampaignFactory {
+) : CampaignRepository {
 
-    override fun create(dm: User, name: String): Campaign {
+    override fun findByUser(user: User): List<Campaign> {
         return transaction {
             val statement = prepareStatement(
                 """
-                INSERT INTO campaigns (name, dm, created_at) 
-                VALUES (?, ?, date('now'))
-                RETURNING id, name
+                SELECT id, name FROM campaigns
+                WHERE dm = ?
             """.trimIndent()
             )
-            statement.setString(1, name)
-            statement.setInt(2, dm.id.value)
-            val campaign = statement.executeQuery().toSequence {
+            statement.setInt(1, user.id.value)
+            val campaigns = statement.executeQuery().toSequence {
                 Campaign(
-                    id = ID(getInt(1)),
-                    dungeonMaster = dm,
-                    name = getString(2),
+                    id = ID(getInt("id")),
+                    dungeonMaster = user,
+                    name = getString("name"),
                     sceneFactory = sceneFactory,
                     characterRepository = characterRepository
                 )
-            }.first()
+            }.toList()
             statement.close()
-            campaign
+            campaigns
         }
     }
 }

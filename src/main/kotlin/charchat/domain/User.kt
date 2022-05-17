@@ -4,6 +4,7 @@ class User(
     val id: ID,
     val name: String,
     private val campaignFactory: CampaignFactory,
+    private val campaignRepository: CampaignRepository,
     private val characterFactory: CharacterFactory,
     private val characterRepository: CharacterRepository
 ) {
@@ -18,6 +19,10 @@ class User(
 
     fun characters(): List<Character> {
         return characterRepository.findByUserID(id)
+    }
+
+    fun campaigns(): List<Campaign> {
+        return campaignRepository.findByUser(this)
     }
 
 }
