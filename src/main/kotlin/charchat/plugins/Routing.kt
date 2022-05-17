@@ -50,7 +50,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
     }
 
     routing {
-        main()
+        main(appDeps.userRepository())
         signIn()
         signUp(appDeps.userPrincipalRepository())
         signInForm()

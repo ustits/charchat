@@ -3,6 +3,8 @@ package charchat.routes
 import charchat.auth.PlaintextPassword
 import charchat.auth.UserPrincipal
 import charchat.auth.UserPrincipalRepository
+import charchat.domain.ID
+import charchat.domain.UserRepository
 import charchat.html.Layout
 import charchat.html.pages.MainPageForUser
 import charchat.html.pages.MainPageForGuest
@@ -38,7 +40,7 @@ class SignUp(val userExists: Boolean? = null)
 @Resource("/logout")
 object Logout
 
-fun Route.main() {
+fun Route.main(userRepository: UserRepository) {
     val createCampaignURL = application.href(CampaignResource)
     val createCharacterURL = application.href(CharacterResource())
     get("/") {
@@ -46,10 +48,12 @@ fun Route.main() {
         if (session == null) {
             call.respondPage(MainPageForGuest())
         } else {
+            val user = userRepository.findByID(ID(session.userID))!!
             call.respondPage(
                 MainPageForUser(
                     createCampaignURL = createCampaignURL,
-                    createCharacterURL = createCharacterURL
+                    createCharacterURL = createCharacterURL,
+                    user = user
                 )
             )
         }

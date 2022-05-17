@@ -1,8 +1,4 @@
-Add class diagram implementation
-Add adapters layer
-Add character creation form
-Add campaign list on main page with separation on DM and Player
-Add campaign creation form
+Add links to characters and campaigns on main page
 Add campaign invite link with hash id url generation (store in db, would be nice for link regeneration)
 Add campaign invite form where user can select character
 Add campaign page with chat form
