@@ -4,3 +4,7 @@ jdbcURL = "jdbc:sqlite:charchat.db"
 [server]
 port = 8080
 baseURL = "http://localhost:8080"
+
+[app]
+salt = "charchat"
+length = 24

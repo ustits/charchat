@@ -65,6 +65,7 @@ dependencies {
 
     implementation("dev.ustits.krefty:krefty-core:0.3.4")
     implementation("org.mindrot:jbcrypt:0.4")
+    implementation("org.hashids:hashids:1.0.3")
 
     implementation(libs.hoplite.core)
     implementation(libs.hoplite.toml)

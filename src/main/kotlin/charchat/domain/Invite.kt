@@ -1,11 +1,12 @@
 package charchat.domain
 
-import java.net.URL
+class Invite(
+    val campaign: Campaign,
+    private val id: String
+) {
 
-class Invite(val url: URL, private val campaign: Campaign) {
-
-    fun addToCampaign(character: Character) {
-        campaign.addCharacter(character)
+    fun print(): String {
+        return id
     }
 
 }

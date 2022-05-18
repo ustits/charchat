@@ -2,14 +2,18 @@ package charchat.domain
 
 class Campaign(
     val id: ID,
-    val dungeonMaster: User,
     val name: String,
     private val sceneFactory: SceneFactory,
-    private val characterRepository: CharacterRepository
+    private val characterRepository: CharacterRepository,
+    private val inviteFactory: InviteFactory
 ) {
 
     fun characters(): List<Character> {
         return characterRepository.findByCampaign(this)
+    }
+
+    fun invite(): Invite {
+        return inviteFactory.create(this)
     }
 
     fun addCharacter(character: Character) {

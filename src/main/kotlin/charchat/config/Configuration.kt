@@ -7,7 +7,11 @@ import java.io.File
 
 data class Configuration(
     val server: Server = Server(),
-    val database: Database = Database()
+    val database: Database = Database(),
+    val app: AppConfig = AppConfig(
+        salt = "charchat",
+        length = 24
+    )
 )
 
 fun readConfiguration(): Configuration {
