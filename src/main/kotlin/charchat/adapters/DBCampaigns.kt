@@ -1,5 +1,7 @@
 package charchat.adapters
 
+import charchat.db.first
+import charchat.db.firstOrNull
 import charchat.db.toSequence
 import charchat.db.transaction
 import charchat.domain.Campaign
@@ -19,55 +21,46 @@ class DBCampaigns(
 ) : CampaignFactory, CampaignRepository {
 
     override fun create(dm: User, name: String): Campaign {
-        return transaction {
-            val statement = prepareStatement(
-                """
+        return transaction(
+            """
                 INSERT INTO campaigns (name, dm, created_at) 
                 VALUES (?, ?, date('now'))
                 RETURNING id, name
             """.trimIndent()
-            )
-            statement.setString(1, name)
-            statement.setInt(2, dm.id.value)
-            val campaign = statement.executeQuery().toSequence {
+        ) {
+            setString(1, name)
+            setInt(2, dm.id.value)
+            executeQuery().first {
                 toCampaign()
-            }.first()
-            statement.close()
-            campaign
+            }
         }
     }
 
     override fun findByID(id: ID): Campaign? {
-        return transaction {
-            val statement = prepareStatement(
-                """
+        return transaction(
+            """
                 SELECT id, name FROM campaigns
                 WHERE dm = ?
             """.trimIndent()
-            )
-            statement.setInt(1, id.value)
-            val campaign = statement.executeQuery().toSequence {
+        ) {
+            setInt(1, id.value)
+            executeQuery().firstOrNull {
                 toCampaign()
-            }.firstOrNull()
-            statement.close()
-            campaign
+            }
         }
     }
 
     override fun findAllByUser(user: User): List<Campaign> {
-        return transaction {
-            val statement = prepareStatement(
-                """
+        return transaction(
+            """
                 SELECT id, name FROM campaigns
                 WHERE dm = ?
             """.trimIndent()
-            )
-            statement.setInt(1, user.id.value)
-            val campaigns = statement.executeQuery().toSequence {
+        ) {
+            setInt(1, user.id.value)
+            executeQuery().toSequence {
                 toCampaign()
             }.toList()
-            statement.close()
-            campaigns
         }
     }
 

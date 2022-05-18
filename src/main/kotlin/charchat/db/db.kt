@@ -4,6 +4,7 @@ import charchat.config.Database
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
 import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.SQLException
 import javax.sql.DataSource
 
@@ -26,9 +27,9 @@ fun connection(): Connection {
     return dataSource.connection
 }
 
-fun <R> transaction(block: Connection.() -> R): R =
-    connection().run {
-        return try {
+fun <R> transaction(block: Connection.() -> R): R {
+    return connection().run {
+        try {
             val result = block.invoke(this)
             commit()
             result
@@ -39,3 +40,10 @@ fun <R> transaction(block: Connection.() -> R): R =
             close()
         }
     }
+}
+
+fun <R> transaction(sql: String, block: PreparedStatement.() -> R): R {
+    return transaction {
+        prepareStatement(sql).use(block)
+    }
+}

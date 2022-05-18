@@ -1,5 +1,6 @@
 package charchat.adapters
 
+import charchat.db.first
 import charchat.db.toSequence
 import charchat.db.transaction
 import charchat.domain.Campaign
@@ -15,19 +16,18 @@ import java.sql.ResultSet
 class DBCharacters : CharacterFactory, CharacterRepository {
 
     override fun create(user: User, characterSpec: CharacterSpec): Character {
-        return transaction {
-            val statement = prepareStatement("""
+        return transaction(
+            """
                 INSERT INTO characters(name, player, created_at)
                 VALUES (?, ?, date('now'))
                 RETURNING id, name
-            """.trimIndent())
-            statement.setString(1, characterSpec.name)
-            statement.setInt(2, user.id.value)
-            val char = statement.executeQuery().toSequence {
+            """.trimIndent()
+        ) {
+            setString(1, characterSpec.name)
+            setInt(2, user.id.value)
+            executeQuery().first {
                 toCharacter()
-            }.first()
-            statement.close()
-            char
+            }
         }
     }
 
@@ -72,14 +72,11 @@ class DBCharacters : CharacterFactory, CharacterRepository {
     }
 
     private fun findAllByIDAndStatement(id: ID, sql: String): List<Character> {
-        return transaction {
-            val statement = prepareStatement(sql)
-            statement.setInt(1, id.value)
-            val chars = statement.executeQuery().toSequence {
+        return transaction(sql) {
+            setInt(1, id.value)
+            executeQuery().toSequence {
                 toCharacter()
             }.toList()
-            statement.close()
-            chars
         }
     }
 

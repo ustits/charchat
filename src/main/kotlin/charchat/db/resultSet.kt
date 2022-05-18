@@ -18,3 +18,8 @@ fun ResultSet.forEach(block: (ResultSet) -> Unit) {
 fun <R> ResultSet.firstOrNull(block: ResultSet.() -> R): R? {
     return toSequence(block).firstOrNull()
 }
+
+fun <R> ResultSet.first(block: ResultSet.() -> R): R {
+    return firstOrNull(block)!!
+}
+

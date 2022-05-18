@@ -1,5 +1,6 @@
 package charchat.auth
 
+import charchat.db.firstOrNull
 import charchat.db.toSequence
 import charchat.db.transaction
 import java.sql.Connection
@@ -8,14 +9,11 @@ import java.sql.ResultSet
 class SqliteUserPrincipalRepository : UserPrincipalRepository {
 
     override fun findByEmailOrNull(email: String): UserPrincipal? {
-        return transaction {
-            val statement = prepareStatement("SELECT id, email, name, password FROM users WHERE email = ?")
-            statement.setString(1, email)
-            val user = statement.executeQuery().toSequence {
+        return transaction("SELECT id, email, name, password FROM users WHERE email = ?") {
+            setString(1, email)
+            executeQuery().firstOrNull {
                 toUser(this)
-            }.firstOrNull()
-            statement.close()
-            user
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 package charchat.adapters
 
-import charchat.db.toSequence
+import charchat.db.firstOrNull
 import charchat.db.transaction
 import charchat.domain.CampaignFactory
 import charchat.domain.CampaignRepository
@@ -18,12 +18,13 @@ class DBUserRepository(
 ) : UserRepository {
 
     override fun findByID(id: ID): User? {
-        return transaction {
-            val statement = prepareStatement("""
+        return transaction(
+            """
                 SELECT name FROM users WHERE id = ?
-            """.trimIndent())
-            statement.setInt(1, id.value)
-            val user = statement.executeQuery().toSequence {
+            """.trimIndent()
+        ) {
+            setInt(1, id.value)
+            executeQuery().firstOrNull {
                 User(
                     id = id,
                     name = getString("name") ?: "",
@@ -32,9 +33,7 @@ class DBUserRepository(
                     characterFactory = characterFactory,
                     characterRepository = characterRepository
                 )
-            }.firstOrNull()
-            statement.close()
-            user
+            }
         }
     }
 }
