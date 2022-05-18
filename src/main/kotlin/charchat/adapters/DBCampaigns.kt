@@ -54,7 +54,7 @@ class DBCampaigns(
         }
     }
 
-    override fun findByUser(user: User): List<Campaign> {
+    override fun findAllByUser(user: User): List<Campaign> {
         return transaction {
             val statement = prepareStatement(
                 """

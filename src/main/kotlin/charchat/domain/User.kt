@@ -18,11 +18,11 @@ class User(
     }
 
     fun characters(): List<Character> {
-        return characterRepository.findByUser(this)
+        return characterRepository.findAllByUser(this)
     }
 
     fun campaigns(): List<Campaign> {
-        return campaignRepository.findByUser(this)
+        return campaignRepository.findAllByUser(this)
     }
 
 }

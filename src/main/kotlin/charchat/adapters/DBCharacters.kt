@@ -41,7 +41,7 @@ class DBCharacters : CharacterFactory, CharacterRepository {
         ).firstOrNull()
     }
 
-    override fun findByUser(user: User): List<Character> {
+    override fun findAllByUser(user: User): List<Character> {
         return findAllByIDAndStatement(
             user.id,
             """
@@ -51,7 +51,7 @@ class DBCharacters : CharacterFactory, CharacterRepository {
         )
     }
 
-    override fun findByCampaign(campaign: Campaign): List<Character> {
+    override fun findAllByCampaign(campaign: Campaign): List<Character> {
         return findAllByIDAndStatement(
             campaign.id,
             """
@@ -61,7 +61,7 @@ class DBCharacters : CharacterFactory, CharacterRepository {
         )
     }
 
-    override fun findByScene(scene: Scene): List<Character> {
+    override fun findAllByScene(scene: Scene): List<Character> {
         return findAllByIDAndStatement(
             scene.id,
             """

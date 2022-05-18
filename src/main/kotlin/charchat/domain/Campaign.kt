@@ -9,7 +9,7 @@ class Campaign(
 ) {
 
     fun characters(): List<Character> {
-        return characterRepository.findByCampaign(this)
+        return characterRepository.findAllByCampaign(this)
     }
 
     fun invite(): Invite {
