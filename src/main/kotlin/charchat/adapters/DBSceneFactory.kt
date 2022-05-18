@@ -1,7 +1,7 @@
 package charchat.adapters
 
 import charchat.db.first
-import charchat.db.transaction
+import charchat.db.sql
 import charchat.domain.Campaign
 import charchat.domain.CharacterRepository
 import charchat.domain.ID
@@ -11,7 +11,7 @@ import charchat.domain.SceneFactory
 class DBSceneFactory(private val characterRepository: CharacterRepository) : SceneFactory {
 
     override fun create(campaign: Campaign, name: String): Scene {
-        return transaction(
+        return sql(
             """
                 INSERT INTO scenes(name, campaign, created_at)
                 VALUES (?, ?, date('now'))

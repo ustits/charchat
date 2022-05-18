@@ -2,7 +2,7 @@ package charchat.adapters
 
 import charchat.db.first
 import charchat.db.toSequence
-import charchat.db.transaction
+import charchat.db.sql
 import charchat.domain.Campaign
 import charchat.domain.Character
 import charchat.domain.CharacterFactory
@@ -16,7 +16,7 @@ import java.sql.ResultSet
 class DBCharacters : CharacterFactory, CharacterRepository {
 
     override fun create(user: User, characterSpec: CharacterSpec): Character {
-        return transaction(
+        return sql(
             """
                 INSERT INTO characters(name, player, created_at)
                 VALUES (?, ?, date('now'))
@@ -72,7 +72,7 @@ class DBCharacters : CharacterFactory, CharacterRepository {
     }
 
     private fun findAllByIDAndStatement(id: ID, sql: String): List<Character> {
-        return transaction(sql) {
+        return sql(sql) {
             setInt(1, id.value)
             executeQuery().toSequence {
                 toCharacter()

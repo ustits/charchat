@@ -3,7 +3,7 @@ package charchat.adapters
 import charchat.db.first
 import charchat.db.firstOrNull
 import charchat.db.toSequence
-import charchat.db.transaction
+import charchat.db.sql
 import charchat.domain.Campaign
 import charchat.domain.CampaignFactory
 import charchat.domain.CampaignRepository
@@ -21,7 +21,7 @@ class DBCampaigns(
 ) : CampaignFactory, CampaignRepository {
 
     override fun create(dm: User, name: String): Campaign {
-        return transaction(
+        return sql(
             """
                 INSERT INTO campaigns (name, dm, created_at) 
                 VALUES (?, ?, date('now'))
@@ -37,7 +37,7 @@ class DBCampaigns(
     }
 
     override fun findByID(id: ID): Campaign? {
-        return transaction(
+        return sql(
             """
                 SELECT id, name FROM campaigns
                 WHERE dm = ?
@@ -51,7 +51,7 @@ class DBCampaigns(
     }
 
     override fun findAllByUser(user: User): List<Campaign> {
-        return transaction(
+        return sql(
             """
                 SELECT id, name FROM campaigns
                 WHERE dm = ?

@@ -42,7 +42,7 @@ fun <R> transaction(block: Connection.() -> R): R {
     }
 }
 
-fun <R> transaction(sql: String, block: PreparedStatement.() -> R): R {
+fun <R> sql(sql: String, block: PreparedStatement.() -> R): R {
     return transaction {
         prepareStatement(sql).use(block)
     }

@@ -3,13 +3,14 @@ package charchat.auth
 import charchat.db.firstOrNull
 import charchat.db.toSequence
 import charchat.db.transaction
+import charchat.db.sql
 import java.sql.Connection
 import java.sql.ResultSet
 
 class SqliteUserPrincipalRepository : UserPrincipalRepository {
 
     override fun findByEmailOrNull(email: String): UserPrincipal? {
-        return transaction("SELECT id, email, name, password FROM users WHERE email = ?") {
+        return sql("SELECT id, email, name, password FROM users WHERE email = ?") {
             setString(1, email)
             executeQuery().firstOrNull {
                 toUser(this)

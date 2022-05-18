@@ -1,7 +1,7 @@
 package charchat.adapters
 
 import charchat.db.firstOrNull
-import charchat.db.transaction
+import charchat.db.sql
 import charchat.domain.CampaignFactory
 import charchat.domain.CampaignRepository
 import charchat.domain.CharacterFactory
@@ -18,7 +18,7 @@ class DBUserRepository(
 ) : UserRepository {
 
     override fun findByID(id: ID): User? {
-        return transaction(
+        return sql(
             """
                 SELECT name FROM users WHERE id = ?
             """.trimIndent()
