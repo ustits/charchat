@@ -4,13 +4,32 @@ import charchat.db.toSequence
 import charchat.db.transaction
 import charchat.domain.Campaign
 import charchat.domain.Character
+import charchat.domain.CharacterFactory
 import charchat.domain.CharacterRepository
+import charchat.domain.CharacterSpec
 import charchat.domain.ID
 import charchat.domain.Scene
 import charchat.domain.User
 import java.sql.ResultSet
 
-class DBCharacterRepository : CharacterRepository {
+class DBCharacters : CharacterFactory, CharacterRepository {
+
+    override fun create(user: User, characterSpec: CharacterSpec): Character {
+        return transaction {
+            val statement = prepareStatement("""
+                INSERT INTO characters(name, player, created_at)
+                VALUES (?, ?, date('now'))
+                RETURNING id, name
+            """.trimIndent())
+            statement.setString(1, characterSpec.name)
+            statement.setInt(2, user.id.value)
+            val char = statement.executeQuery().toSequence {
+                toCharacter()
+            }.first()
+            statement.close()
+            char
+        }
+    }
 
     override fun findByID(id: ID): Character? {
         return findAllByIDAndStatement(

@@ -1,9 +1,7 @@
 package charchat
 
-import charchat.adapters.DBCampaignFactory
-import charchat.adapters.DBCampaignRepository
-import charchat.adapters.DBCharacterFactory
-import charchat.adapters.DBCharacterRepository
+import charchat.adapters.DBCampaigns
+import charchat.adapters.DBCharacters
 import charchat.adapters.DBSceneFactory
 import charchat.adapters.DBUserRepository
 import charchat.adapters.HashidsInviteFactory
@@ -24,24 +22,22 @@ import org.hashids.Hashids
 class AppDeps(appConfig: AppConfig) {
 
     private val hashids = Hashids(appConfig.salt, appConfig.length)
-    private val characterFactory: CharacterFactory = DBCharacterFactory()
+    private val dbCharacters: DBCharacters = DBCharacters()
+    private val characterFactory: CharacterFactory = dbCharacters
     private val inviteFactory: InviteFactory = HashidsInviteFactory(
         hashids = hashids
     )
-    private val characterRepository: CharacterRepository = DBCharacterRepository()
+    private val characterRepository: CharacterRepository = dbCharacters
     private val sceneFactory: SceneFactory = DBSceneFactory(
         characterRepository = characterRepository
     )
-    private val campaignFactory: CampaignFactory = DBCampaignFactory(
+    private val dbCampaigns: DBCampaigns = DBCampaigns(
         sceneFactory = sceneFactory,
         characterRepository = characterRepository,
         inviteFactory = inviteFactory
     )
-    private val campaignRepository: CampaignRepository = DBCampaignRepository(
-        sceneFactory = sceneFactory,
-        characterRepository = characterRepository,
-        inviteFactory = inviteFactory
-    )
+    private val campaignFactory: CampaignFactory = dbCampaigns
+    private val campaignRepository: CampaignRepository = dbCampaigns
     private val inviteRepository: InviteRepository = HashidsInviteRepository(
         hashids = hashids,
         campaignRepository = campaignRepository
