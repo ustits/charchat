@@ -8,7 +8,7 @@ import charchat.adapters.HashidsInviteFactory
 import charchat.adapters.HashidsInviteRepository
 import charchat.auth.SqliteUserPrincipalRepository
 import charchat.auth.UserPrincipalRepository
-import charchat.config.AppConfig
+import charchat.config.Configuration
 import charchat.domain.CampaignFactory
 import charchat.domain.CampaignRepository
 import charchat.domain.CharacterFactory
@@ -19,9 +19,9 @@ import charchat.domain.SceneFactory
 import charchat.domain.UserRepository
 import org.hashids.Hashids
 
-class AppDeps(appConfig: AppConfig) {
+class AppDeps(val config: Configuration) {
 
-    private val hashids = Hashids(appConfig.salt, appConfig.length)
+    private val hashids = Hashids(config.app.salt, config.app.length)
     private val dbCharacters: DBCharacters = DBCharacters()
     private val characterFactory: CharacterFactory = dbCharacters
     private val inviteFactory: InviteFactory = HashidsInviteFactory(

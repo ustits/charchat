@@ -26,7 +26,15 @@ import io.ktor.server.websocket.*
 import kotlinx.serialization.json.Json
 import java.time.Duration
 
+private lateinit var baseURL: String
+
+fun Application.baseURL(): String {
+    return baseURL
+}
+
 fun Application.configureRouting(appDeps: AppDeps) {
+    baseURL = appDeps.config.server.baseURL
+
     install(Resources) {
     }
 

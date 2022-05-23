@@ -13,7 +13,7 @@ import io.ktor.server.netty.*
 
 fun main() {
     val cfg = readConfiguration()
-    val appDeps = AppDeps(cfg.app)
+    val appDeps = AppDeps(cfg)
 
     embeddedServer(Netty, port = cfg.server.port, host = "0.0.0.0") {
         configureDatabase(cfg.database)

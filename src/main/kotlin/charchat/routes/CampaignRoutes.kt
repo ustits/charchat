@@ -5,6 +5,7 @@ import charchat.domain.UserRepository
 import charchat.html.pages.CampaignPage
 import charchat.plugins.AppSession
 import charchat.plugins.SESSION_LOGIN_CONFIGURATION_NAME
+import charchat.plugins.baseURL
 import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -21,7 +22,13 @@ object CampaignResource {
 
     @Serializable
     @Resource("/{id}")
-    class ByID(val root: CampaignResource = CampaignResource, val id: Int)
+    class ByID(val root: CampaignResource = CampaignResource, val id: Int) {
+
+        @Serializable
+        @Resource("/invite/{inviteID}")
+        class WithInvite(val root: ByID, val inviteID: String)
+
+    }
 
 }
 
@@ -48,7 +55,11 @@ fun Route.campaignPage(userRepository: UserRepository) {
             if (campaign == null) {
                 throw NotFoundException()
             } else {
-                call.respondPage(CampaignPage(campaign))
+                val invite = campaign.invite().print()
+                val inviteURL = application.baseURL() + application.href(
+                    CampaignResource.ByID.WithInvite(resource, invite)
+                )
+                call.respondPage(CampaignPage(campaign, inviteURL))
             }
         }
     }

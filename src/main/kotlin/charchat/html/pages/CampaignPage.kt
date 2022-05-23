@@ -4,17 +4,17 @@ import charchat.domain.Campaign
 import charchat.html.Layout
 import charchat.html.templates.Chat
 import io.ktor.server.html.*
+import kotlinx.html.a
 import kotlinx.html.h2
 import kotlinx.html.li
 import kotlinx.html.p
 import kotlinx.html.ul
 
-class CampaignPage(private val campaign: Campaign) : Page {
+class CampaignPage(private val campaign: Campaign, private val inviteURL: String) : Page {
 
     override fun Layout.apply() {
         content {
             val characters = campaign.characters()
-            val invite = campaign.invite().print()
             h2 {
                 +"Characters"
             }
@@ -34,7 +34,8 @@ class CampaignPage(private val campaign: Campaign) : Page {
             }
 
             p {
-                +"Invite: $invite"
+                +"Invite: "
+                a(href = inviteURL) { +inviteURL }
             }
             insert(Chat("/chat")) {
                 name = "Example chat"

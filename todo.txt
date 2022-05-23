@@ -1,4 +1,3 @@
-Add invite url on campaign page
 Add invite form
 Add campaign name field in creation form
 Invite url in combination with campaign id can break salt
