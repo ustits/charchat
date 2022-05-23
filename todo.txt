@@ -1,8 +1,8 @@
 Add join URL
 Show registration form on invite page if user is not logged in
+Add "create and join" on invite form
 Add campaign name field in creation form
 Invite url in combination with campaign id can break salt
-Add links to characters and campaigns on main page
 Add campaign invite link with hash id url generation (store in db, would be nice for link regeneration)
 Add campaign invite form where user can select character
 Add campaign page with chat form

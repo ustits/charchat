@@ -1,6 +1,7 @@
 package charchat.html
 
 import charchat.plugins.AppSession
+import io.ktor.server.application.*
 import io.ktor.server.html.*
 import kotlinx.html.FlowContent
 import kotlinx.html.HTML
@@ -26,7 +27,8 @@ class Layout(
     val signInURL: String,
     val signUpURL: String,
     private val logoutURL: String,
-    val appSession: AppSession?
+    val appSession: AppSession?,
+    val application: Application
 ) : Template<HTML> {
 
     val content = Placeholder<FlowContent>()

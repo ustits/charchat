@@ -127,7 +127,8 @@ suspend fun ApplicationCall.respondPage(page: Page) {
             signInURL = signInURL,
             signUpURL = signUpURL,
             logoutURL = logoutURL,
-            appSession = session
+            appSession = session,
+            application = application
         )
     ) {
         insert(page) {}

@@ -2,7 +2,11 @@ package charchat.html.pages
 
 import charchat.domain.User
 import charchat.html.Layout
+import charchat.routes.CampaignResource
+import charchat.routes.CharacterResource
+import io.ktor.server.resources.*
 import kotlinx.html.FormMethod
+import kotlinx.html.a
 import kotlinx.html.form
 import kotlinx.html.h2
 import kotlinx.html.label
@@ -44,7 +48,9 @@ class MainPageForUser(
                 ul {
                     campaigns.forEach {campaign ->
                         li {
-                            +campaign.name
+                            a(href = application.href(CampaignResource.ByID(id = campaign.id.value))) {
+                                +campaign.name
+                            }
                         }
                     }
                 }
@@ -60,7 +66,9 @@ class MainPageForUser(
                 ul {
                     characters.forEach { char ->
                         li {
-                            +char.name
+                            a(href = application.href(CharacterResource.ByID(id = char.id.value))) {
+                                +char.name
+                            }
                         }
                     }
                 }

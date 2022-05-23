@@ -24,7 +24,7 @@ class CharacterResource {
 
     @Serializable
     @Resource("/{id}")
-    class Page(val root: CharacterResource = CharacterResource(), val id: Int)
+    class ByID(val root: CharacterResource = CharacterResource(), val id: Int)
 
 }
 
@@ -36,7 +36,7 @@ fun Route.createCharacter(userRepository: UserRepository) {
             val params = call.receiveParameters()
             val charSpec = parseCharacterSpec(params)
             val character = user.createCharacter(charSpec)
-            val redirect = application.href(CharacterResource.Page(id = character.id.value))
+            val redirect = application.href(CharacterResource.ByID(id = character.id.value))
             call.respondRedirect(redirect)
         }
     }
@@ -44,7 +44,7 @@ fun Route.createCharacter(userRepository: UserRepository) {
 
 fun Route.characterPage(userRepository: UserRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
-        get<CharacterResource.Page> { resource ->
+        get<CharacterResource.ByID> { resource ->
             val session = call.principal<AppSession>()!!
             val user = userRepository.findByID(ID(session.userID))!!
             val character = user.characters().firstOrNull { char ->
