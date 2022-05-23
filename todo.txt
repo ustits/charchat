@@ -1,4 +1,5 @@
-Add invite form
+Add join URL
+Show registration form on invite page if user is not logged in
 Add campaign name field in creation form
 Invite url in combination with campaign id can break salt
 Add links to characters and campaigns on main page

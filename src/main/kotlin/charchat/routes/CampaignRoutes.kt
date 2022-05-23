@@ -3,6 +3,7 @@ package charchat.routes
 import charchat.domain.ID
 import charchat.domain.UserRepository
 import charchat.html.pages.CampaignPage
+import charchat.html.pages.InvitePage
 import charchat.plugins.AppSession
 import charchat.plugins.SESSION_LOGIN_CONFIGURATION_NAME
 import charchat.plugins.baseURL
@@ -61,6 +62,16 @@ fun Route.campaignPage(userRepository: UserRepository) {
                 )
                 call.respondPage(CampaignPage(campaign, inviteURL))
             }
+        }
+    }
+}
+
+fun Route.inviteForm(userRepository: UserRepository) {
+    authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
+        get<CampaignResource.ByID.WithInvite> {
+            val session = call.principal<AppSession>()!!
+            val user = userRepository.findByID(ID(session.userID))!!
+            call.respondPage(InvitePage(user))
         }
     }
 }
