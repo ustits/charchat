@@ -2,6 +2,7 @@ package charchat
 
 import charchat.adapters.DBCampaigns
 import charchat.adapters.DBCharacters
+import charchat.adapters.DBPartyMemberRepository
 import charchat.adapters.DBSceneFactory
 import charchat.adapters.DBUserRepository
 import charchat.adapters.HashidsInviteFactory
@@ -15,6 +16,7 @@ import charchat.domain.CharacterFactory
 import charchat.domain.CharacterRepository
 import charchat.domain.InviteFactory
 import charchat.domain.InviteRepository
+import charchat.domain.PartyMemberRepository
 import charchat.domain.SceneFactory
 import charchat.domain.UserRepository
 import org.hashids.Hashids
@@ -27,6 +29,7 @@ class AppDeps(val config: Configuration) {
     private val inviteFactory: InviteFactory = HashidsInviteFactory(
         hashids = hashids
     )
+    private val partyMemberRepository: PartyMemberRepository = DBPartyMemberRepository()
     private val characterRepository: CharacterRepository = dbCharacters
     private val sceneFactory: SceneFactory = DBSceneFactory(
         characterRepository = characterRepository
@@ -34,7 +37,8 @@ class AppDeps(val config: Configuration) {
     private val dbCampaigns: DBCampaigns = DBCampaigns(
         sceneFactory = sceneFactory,
         characterRepository = characterRepository,
-        inviteFactory = inviteFactory
+        inviteFactory = inviteFactory,
+        partyMemberRepository = partyMemberRepository
     )
     private val campaignFactory: CampaignFactory = dbCampaigns
     private val campaignRepository: CampaignRepository = dbCampaigns
@@ -57,5 +61,7 @@ class AppDeps(val config: Configuration) {
     fun inviteRepository(): InviteRepository = inviteRepository
 
     fun characterRepository(): CharacterRepository = characterRepository
+
+    fun campaignRepository(): CampaignRepository = campaignRepository
 
 }

@@ -10,6 +10,7 @@ import charchat.domain.CampaignRepository
 import charchat.domain.CharacterRepository
 import charchat.domain.ID
 import charchat.domain.InviteFactory
+import charchat.domain.PartyMemberRepository
 import charchat.domain.SceneFactory
 import charchat.domain.User
 import java.sql.ResultSet
@@ -17,7 +18,8 @@ import java.sql.ResultSet
 class DBCampaigns(
     private val sceneFactory: SceneFactory,
     private val characterRepository: CharacterRepository,
-    private val inviteFactory: InviteFactory
+    private val inviteFactory: InviteFactory,
+    private val partyMemberRepository: PartyMemberRepository
 ) : CampaignFactory, CampaignRepository {
 
     override fun create(dm: User, name: String): Campaign {
@@ -70,7 +72,8 @@ class DBCampaigns(
             name = getString("name"),
             sceneFactory = sceneFactory,
             characterRepository = characterRepository,
-            inviteFactory = inviteFactory
+            inviteFactory = inviteFactory,
+            partyMemberRepository = partyMemberRepository
         )
     }
 }

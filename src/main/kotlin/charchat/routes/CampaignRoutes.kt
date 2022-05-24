@@ -1,5 +1,6 @@
 package charchat.routes
 
+import charchat.domain.CampaignRepository
 import charchat.domain.CharacterRepository
 import charchat.domain.ID
 import charchat.domain.InviteRepository
@@ -53,14 +54,10 @@ fun Route.createCampaign(userRepository: UserRepository) {
     }
 }
 
-fun Route.campaignPage(userRepository: UserRepository) {
+fun Route.campaignPage(campaignRepository: CampaignRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         get<CampaignResource.ByID> { resource ->
-            val session = call.principal<AppSession>()!!
-            val user = userRepository.findByID(ID(session.userID))!!
-            val campaign = user.campaigns().firstOrNull { campaign ->
-                campaign.id.value == resource.id
-            }
+            val campaign = campaignRepository.findByID(ID(resource.id))
             if (campaign == null) {
                 throw NotFoundException()
             } else {

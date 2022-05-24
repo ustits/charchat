@@ -68,7 +68,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
         logout()
         wsChat()
         createCampaign(appDeps.userRepository())
-        campaignPage(appDeps.userRepository())
+        campaignPage(appDeps.campaignRepository())
         createCharacter(appDeps.userRepository())
         characterPage(appDeps.userRepository())
         inviteForm(appDeps.userRepository(), appDeps.inviteRepository())

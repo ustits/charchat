@@ -57,6 +57,7 @@ class DBCharacters : CharacterFactory, CharacterRepository {
             """
                 SELECT characters.id, characters.name FROM characters, campaign_characters
                 WHERE campaign_characters.campaign = ? 
+                AND campaign_characters.character = characters.id
             """.trimIndent()
         )
     }

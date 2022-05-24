@@ -5,7 +5,8 @@ class Campaign(
     val name: String,
     private val sceneFactory: SceneFactory,
     private val characterRepository: CharacterRepository,
-    private val inviteFactory: InviteFactory
+    private val inviteFactory: InviteFactory,
+    private val partyMemberRepository: PartyMemberRepository
 ) {
 
     fun characters(): List<Character> {
@@ -17,11 +18,15 @@ class Campaign(
     }
 
     fun addCharacter(character: Character) {
-        TODO()
+        partyMemberRepository.add(
+            PartyMember(this, character)
+        )
     }
 
     fun deleteCharacter(character: Character) {
-        TODO()
+        partyMemberRepository.delete(
+            PartyMember(this, character)
+        )
     }
 
     fun startScene(): Scene {
