@@ -1,6 +1,8 @@
 package charchat.routes
 
+import charchat.domain.CharacterRepository
 import charchat.domain.ID
+import charchat.domain.InviteRepository
 import charchat.domain.UserRepository
 import charchat.html.pages.CampaignPage
 import charchat.html.pages.InvitePage
@@ -27,7 +29,13 @@ object CampaignResource {
 
         @Serializable
         @Resource("/invite/{inviteID}")
-        class WithInvite(val root: ByID, val inviteID: String)
+        class WithInvite(val root: ByID, val inviteID: String) {
+
+            @Serializable
+            @Resource("character/{characterID}")
+            class Join(val root: WithInvite, val characterID: Int)
+
+        }
 
     }
 
@@ -66,12 +74,35 @@ fun Route.campaignPage(userRepository: UserRepository) {
     }
 }
 
-fun Route.inviteForm(userRepository: UserRepository) {
+fun Route.inviteForm(userRepository: UserRepository, inviteRepository: InviteRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
-        get<CampaignResource.ByID.WithInvite> {
+        get<CampaignResource.ByID.WithInvite> { resource ->
             val session = call.principal<AppSession>()!!
             val user = userRepository.findByID(ID(session.userID))!!
-            call.respondPage(InvitePage(user))
+            val invite = inviteRepository.findByText(resource.inviteID)
+            if (invite == null) {
+                throw NotFoundException()
+            } else {
+                call.respondPage(InvitePage(user, invite))
+            }
+
+        }
+    }
+}
+
+fun Route.joinCharacter(inviteRepository: InviteRepository, characterRepository: CharacterRepository) {
+    authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
+        get<CampaignResource.ByID.WithInvite.Join> { resource ->
+            val invite = inviteRepository.findByText(resource.root.inviteID)
+            val character = characterRepository.findByID(ID(resource.characterID))
+            if (invite == null || character == null) {
+                throw NotFoundException()
+            } else {
+                val campaign = invite.campaign
+                campaign.addCharacter(character)
+                val redirect = application.href(CampaignResource.ByID(id = campaign.id.value))
+                call.respondRedirect(redirect)
+            }
         }
     }
 }

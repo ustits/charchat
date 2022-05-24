@@ -1,4 +1,4 @@
-Add join URL
+Implement campaign methods
 Show registration form on invite page if user is not logged in
 Add "create and join" on invite form
 Add campaign name field in creation form

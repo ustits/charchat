@@ -56,4 +56,6 @@ class AppDeps(val config: Configuration) {
 
     fun inviteRepository(): InviteRepository = inviteRepository
 
+    fun characterRepository(): CharacterRepository = characterRepository
+
 }

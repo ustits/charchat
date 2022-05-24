@@ -7,6 +7,7 @@ import charchat.routes.characterPage
 import charchat.routes.createCampaign
 import charchat.routes.createCharacter
 import charchat.routes.inviteForm
+import charchat.routes.joinCharacter
 import charchat.routes.wsChat
 import charchat.routes.logout
 import charchat.routes.signIn
@@ -70,7 +71,8 @@ fun Application.configureRouting(appDeps: AppDeps) {
         campaignPage(appDeps.userRepository())
         createCharacter(appDeps.userRepository())
         characterPage(appDeps.userRepository())
-        inviteForm(appDeps.userRepository())
+        inviteForm(appDeps.userRepository(), appDeps.inviteRepository())
+        joinCharacter(appDeps.inviteRepository(), appDeps.characterRepository())
 
         static("assets") {
             resources("js")

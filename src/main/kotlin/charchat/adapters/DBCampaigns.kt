@@ -40,7 +40,7 @@ class DBCampaigns(
         return sql(
             """
                 SELECT id, name FROM campaigns
-                WHERE dm = ?
+                WHERE id = ?
             """.trimIndent()
         ) {
             setInt(1, id.value)
