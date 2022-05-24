@@ -1,4 +1,3 @@
-Don't show on invite form characters that are already in party
 Show registration form on invite page if user is not logged in
 Add delete button on campaign page available for dm
 Add delete button on campaign page for user characters
