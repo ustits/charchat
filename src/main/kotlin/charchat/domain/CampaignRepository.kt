@@ -4,6 +4,6 @@ interface CampaignRepository {
 
     fun findByID(id: ID): Campaign?
 
-    fun findAllByUser(user: User): List<Campaign>
+    fun findAllByDungeonMaster(dm: DungeonMaster): List<Campaign>
 
 }

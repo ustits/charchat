@@ -10,7 +10,10 @@ class User(
 ) {
 
     fun createCampaign(): Campaign {
-        return campaignFactory.create(this, "tmp")
+        return campaignFactory.create(
+            dm = DungeonMaster(this),
+            name = "tmp"
+        )
     }
 
     fun createCharacter(characterSpec: CharacterSpec): Character {
@@ -22,7 +25,9 @@ class User(
     }
 
     fun campaigns(): List<Campaign> {
-        return campaignRepository.findAllByUser(this)
+        return campaignRepository.findAllByDungeonMaster(
+            DungeonMaster(this)
+        )
     }
 
 }

@@ -8,11 +8,11 @@ import charchat.domain.Campaign
 import charchat.domain.CampaignFactory
 import charchat.domain.CampaignRepository
 import charchat.domain.CharacterRepository
+import charchat.domain.DungeonMaster
 import charchat.domain.ID
 import charchat.domain.InviteFactory
 import charchat.domain.PartyMemberRepository
 import charchat.domain.SceneFactory
-import charchat.domain.User
 import java.sql.ResultSet
 
 class DBCampaigns(
@@ -22,7 +22,7 @@ class DBCampaigns(
     private val partyMemberRepository: PartyMemberRepository
 ) : CampaignFactory, CampaignRepository {
 
-    override fun create(dm: User, name: String): Campaign {
+    override fun create(dm: DungeonMaster, name: String): Campaign {
         return sql(
             """
                 INSERT INTO campaigns (name, dm, created_at) 
@@ -31,7 +31,7 @@ class DBCampaigns(
             """.trimIndent()
         ) {
             setString(1, name)
-            setInt(2, dm.id.value)
+            setInt(2, dm.user.id.value)
             executeQuery().first {
                 toCampaign()
             }
@@ -52,14 +52,14 @@ class DBCampaigns(
         }
     }
 
-    override fun findAllByUser(user: User): List<Campaign> {
+    override fun findAllByDungeonMaster(dm: DungeonMaster): List<Campaign> {
         return sql(
             """
                 SELECT id, name FROM campaigns
                 WHERE dm = ?
             """.trimIndent()
         ) {
-            setInt(1, user.id.value)
+            setInt(1, dm.user.id.value)
             executeQuery().toSequence {
                 toCampaign()
             }.toList()

@@ -21,6 +21,8 @@ class Campaign {
     +deleteCharacter(Character)
 }
 
+class DungeonMaster
+
 class PartyMember {
     +plus(Action): Event
 }
