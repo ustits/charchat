@@ -10,7 +10,10 @@ import kotlinx.html.h2
 import kotlinx.html.p
 import kotlinx.html.role
 
-class InvitePage(private val characters: List<charchat.domain.Character>, private val invite: Invite) : Page {
+class InvitePage(
+    private val characters: List<charchat.domain.Character>,
+    private val invite: Invite
+) : Page {
 
     override fun Layout.apply() {
         val inviteURL = CampaignResource.ByID.WithInvite(
@@ -20,7 +23,7 @@ class InvitePage(private val characters: List<charchat.domain.Character>, privat
 
         content {
             h2 {
-                +"Join with"
+                +"Join campaign \"${invite.campaign.name}\" with"
             }
             if (characters.isEmpty()) {
                 p {

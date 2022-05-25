@@ -6,6 +6,7 @@ import charchat.html.templates.Chat
 import io.ktor.server.html.*
 import kotlinx.html.a
 import kotlinx.html.h2
+import kotlinx.html.h3
 import kotlinx.html.li
 import kotlinx.html.p
 import kotlinx.html.ul
@@ -16,6 +17,9 @@ class CampaignPage(private val campaign: Campaign, private val inviteURL: String
         content {
             val characters = campaign.partyMembers().map { it.character }
             h2 {
+                +"Campaign: ${campaign.name}"
+            }
+            h3 {
                 +"Characters"
             }
             if (characters.isNotEmpty()) {
