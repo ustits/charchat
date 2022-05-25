@@ -9,6 +9,7 @@ import charchat.domain.CharacterFactory
 import charchat.domain.CharacterRepository
 import charchat.domain.CharacterSpec
 import charchat.domain.ID
+import charchat.domain.Player
 import charchat.domain.Scene
 import charchat.domain.User
 import java.sql.ResultSet
@@ -41,9 +42,9 @@ class DBCharacters : CharacterFactory, CharacterRepository {
         ).firstOrNull()
     }
 
-    override fun findAllByUser(user: User): List<Character> {
+    override fun findAllByPlayer(player: Player): List<Character> {
         return findAllByIDAndStatement(
-            user.id,
+            player.user.id,
             """
                 SELECT id, name FROM characters
                 WHERE player = ?

@@ -4,7 +4,7 @@ interface CharacterRepository {
 
     fun findByID(id: ID): Character?
 
-    fun findAllByUser(user: User): List<Character>
+    fun findAllByPlayer(player: Player): List<Character>
 
     fun findAllByCampaign(campaign: Campaign): List<Character>
 

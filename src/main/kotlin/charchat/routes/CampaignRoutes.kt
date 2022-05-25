@@ -5,6 +5,7 @@ import charchat.domain.CharacterRepository
 import charchat.domain.DungeonMasterRepository
 import charchat.domain.ID
 import charchat.domain.InviteRepository
+import charchat.domain.PlayerRepository
 import charchat.domain.UserRepository
 import charchat.html.pages.CampaignPage
 import charchat.html.pages.InvitePage
@@ -72,18 +73,18 @@ fun Route.campaignPage(campaignRepository: CampaignRepository) {
     }
 }
 
-fun Route.inviteForm(userRepository: UserRepository, inviteRepository: InviteRepository) {
+fun Route.inviteForm(playerRepository: PlayerRepository, inviteRepository: InviteRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         get<CampaignResource.ByID.WithInvite> { resource ->
             val session = call.principal<AppSession>()!!
-            val user = userRepository.findByID(ID(session.userID))!!
+            val player = playerRepository.findByID(ID(session.userID))!!
             val invite = inviteRepository.findByText(resource.inviteID)
             if (invite == null) {
                 throw NotFoundException()
             } else {
                 val campaignCharacters = invite.campaign.partyMembers()
                     .map { it.character }.toSet()
-                val characters = user.characters() - campaignCharacters
+                val characters = player.characters() - campaignCharacters
                 call.respondPage(InvitePage(characters, invite))
             }
         }

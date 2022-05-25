@@ -18,6 +18,7 @@ import charchat.domain.DungeonMasterRepository
 import charchat.domain.InviteFactory
 import charchat.domain.InviteRepository
 import charchat.domain.PartyMemberRepository
+import charchat.domain.PlayerRepository
 import charchat.domain.SceneFactory
 import charchat.domain.UserRepository
 import org.hashids.Hashids
@@ -45,14 +46,16 @@ class AppDeps(val config: Configuration) {
         hashids = hashids,
         campaignRepository = campaignRepository
     )
-    private val userRepository: UserRepository = DBUserRepository(
-        characterFactory = characterFactory,
-        characterRepository = characterRepository
-    )
+    private val userRepository: UserRepository = DBUserRepository()
     private val dungeonMasterRepository: DungeonMasterRepository = DungeonMasterRepository.ByUser(
         userRepository = userRepository,
         campaignFactory = campaignFactory,
         campaignRepository = campaignRepository
+    )
+    private val playerRepository: PlayerRepository = PlayerRepository.ByUser(
+        userRepository = userRepository,
+        characterFactory = characterFactory,
+        characterRepository = characterRepository
     )
     private val userPrincipalRepository: UserPrincipalRepository = SqliteUserPrincipalRepository()
 
@@ -67,5 +70,7 @@ class AppDeps(val config: Configuration) {
     fun campaignRepository(): CampaignRepository = campaignRepository
 
     fun dungeonMasterRepository(): DungeonMasterRepository = dungeonMasterRepository
+
+    fun playerRepository(): PlayerRepository = playerRepository
 
 }

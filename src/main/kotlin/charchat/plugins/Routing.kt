@@ -60,7 +60,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
     }
 
     routing {
-        main(appDeps.userRepository(), appDeps.dungeonMasterRepository())
+        main(appDeps.playerRepository(), appDeps.dungeonMasterRepository())
         signIn()
         signUp(appDeps.userPrincipalRepository())
         signInForm()
@@ -69,9 +69,9 @@ fun Application.configureRouting(appDeps: AppDeps) {
         wsChat()
         createCampaign(appDeps.dungeonMasterRepository())
         campaignPage(appDeps.campaignRepository())
-        createCharacter(appDeps.userRepository())
-        characterPage(appDeps.userRepository())
-        inviteForm(appDeps.userRepository(), appDeps.inviteRepository())
+        createCharacter(appDeps.playerRepository())
+        characterPage(appDeps.playerRepository())
+        inviteForm(appDeps.playerRepository(), appDeps.inviteRepository())
         joinCharacter(appDeps.inviteRepository(), appDeps.characterRepository())
 
         static("assets") {

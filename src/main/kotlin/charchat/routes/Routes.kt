@@ -5,7 +5,7 @@ import charchat.auth.UserPrincipal
 import charchat.auth.UserPrincipalRepository
 import charchat.domain.DungeonMasterRepository
 import charchat.domain.ID
-import charchat.domain.UserRepository
+import charchat.domain.PlayerRepository
 import charchat.html.Layout
 import charchat.html.pages.MainPageForUser
 import charchat.html.pages.MainPageForGuest
@@ -41,7 +41,7 @@ class SignUp(val userExists: Boolean? = null)
 @Resource("/logout")
 object Logout
 
-fun Route.main(userRepository: UserRepository, dungeonMasterRepository: DungeonMasterRepository) {
+fun Route.main(playerRepository: PlayerRepository, dungeonMasterRepository: DungeonMasterRepository) {
     val createCampaignURL = application.href(CampaignResource)
     val createCharacterURL = application.href(CharacterResource())
     get("/") {
@@ -50,13 +50,13 @@ fun Route.main(userRepository: UserRepository, dungeonMasterRepository: DungeonM
             call.respondPage(MainPageForGuest())
         } else {
             val id = ID(session.userID)
-            val user = userRepository.findByID(id)!!
+            val characters = playerRepository.findByID(id)!!.characters()
             val campaigns = dungeonMasterRepository.findByID(id)!!.campaigns()
             call.respondPage(
                 MainPageForUser(
                     createCampaignURL = createCampaignURL,
                     createCharacterURL = createCharacterURL,
-                    user = user,
+                    characters = characters,
                     campaigns = campaigns
                 )
             )

@@ -2,7 +2,7 @@ package charchat.routes
 
 import charchat.domain.CharacterSpec
 import charchat.domain.ID
-import charchat.domain.UserRepository
+import charchat.domain.PlayerRepository
 import charchat.html.pages.CharacterPage
 import charchat.plugins.AppSession
 import charchat.plugins.SESSION_LOGIN_CONFIGURATION_NAME
@@ -28,26 +28,26 @@ class CharacterResource {
 
 }
 
-fun Route.createCharacter(userRepository: UserRepository) {
+fun Route.createCharacter(playerRepository: PlayerRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         post<CharacterResource> {
             val session = call.principal<AppSession>()!!
-            val user = userRepository.findByID(ID(session.userID))!!
+            val player = playerRepository.findByID(ID(session.userID))!!
             val params = call.receiveParameters()
             val charSpec = parseCharacterSpec(params)
-            val character = user.createCharacter(charSpec)
+            val character = player.createCharacter(charSpec)
             val redirect = application.href(CharacterResource.ByID(id = character.id.value))
             call.respondRedirect(redirect)
         }
     }
 }
 
-fun Route.characterPage(userRepository: UserRepository) {
+fun Route.characterPage(playerRepository: PlayerRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         get<CharacterResource.ByID> { resource ->
             val session = call.principal<AppSession>()!!
-            val user = userRepository.findByID(ID(session.userID))!!
-            val character = user.characters().firstOrNull { char ->
+            val player = playerRepository.findByID(ID(session.userID))!!
+            val character = player.characters().firstOrNull { char ->
                 char.id == ID(resource.id)
             }
             if (character == null) {
