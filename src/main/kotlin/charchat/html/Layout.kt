@@ -75,11 +75,9 @@ class Layout(
                                 }
                             }
                         } else {
-                            if (appSession.name != null && appSession.name.isNotBlank()) {
-                                li {
-                                    p {
-                                        +appSession.name
-                                    }
+                            li {
+                                p {
+                                    +appSession.user.name
                                 }
                             }
                             li {

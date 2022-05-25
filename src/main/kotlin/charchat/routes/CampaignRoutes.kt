@@ -6,7 +6,6 @@ import charchat.domain.DungeonMasterRepository
 import charchat.domain.ID
 import charchat.domain.InviteRepository
 import charchat.domain.PlayerRepository
-import charchat.domain.UserRepository
 import charchat.html.pages.CampaignPage
 import charchat.html.pages.InvitePage
 import charchat.plugins.AppSession
@@ -48,7 +47,7 @@ fun Route.createCampaign(dungeonMasterRepository: DungeonMasterRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         post<CampaignResource> {
             val session = call.principal<AppSession>()!!
-            val dm = dungeonMasterRepository.findByID(ID(session.userID))!!
+            val dm = dungeonMasterRepository.findByUser(session.user)!!
             val campaign = dm.createCampaign()
             val redirect = application.href(CampaignResource.ByID(id = campaign.id.value))
             call.respondRedirect(redirect)
@@ -77,7 +76,7 @@ fun Route.inviteForm(playerRepository: PlayerRepository, inviteRepository: Invit
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         get<CampaignResource.ByID.WithInvite> { resource ->
             val session = call.principal<AppSession>()!!
-            val player = playerRepository.findByID(ID(session.userID))!!
+            val player = playerRepository.findByUser(session.user)!!
             val invite = inviteRepository.findByText(resource.inviteID)
             if (invite == null) {
                 throw NotFoundException()

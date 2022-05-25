@@ -4,7 +4,6 @@ import charchat.auth.PlaintextPassword
 import charchat.auth.UserPrincipal
 import charchat.auth.UserPrincipalRepository
 import charchat.domain.DungeonMasterRepository
-import charchat.domain.ID
 import charchat.domain.PlayerRepository
 import charchat.html.Layout
 import charchat.html.pages.MainPageForUser
@@ -49,9 +48,8 @@ fun Route.main(playerRepository: PlayerRepository, dungeonMasterRepository: Dung
         if (session == null) {
             call.respondPage(MainPageForGuest())
         } else {
-            val id = ID(session.userID)
-            val characters = playerRepository.findByID(id)!!.characters()
-            val campaigns = dungeonMasterRepository.findByID(id)!!.campaigns()
+            val characters = playerRepository.findByUser(session.user)!!.characters()
+            val campaigns = dungeonMasterRepository.findByUser(session.user)!!.campaigns()
             call.respondPage(
                 MainPageForUser(
                     createCampaignURL = createCampaignURL,
@@ -94,11 +92,9 @@ fun Route.signUp(userPrincipalRepository: UserPrincipalRepository) {
             val existingUser = userPrincipalRepository.findByEmailOrNull(email)
             if (existingUser == null) {
                 val user = userPrincipalRepository.addOrUpdate(email, PlaintextPassword(password))
-                val session = AppSession(user.id, user.name)
-                call.setSessionAndRedirect(session)
+                call.setSessionAndRedirect(user.toAppSession())
             } else if (existingUser.hasSamePassword(password)) {
-                val session = AppSession(existingUser.id, existingUser.name)
-                call.setSessionAndRedirect(session)
+                call.setSessionAndRedirect(existingUser.toAppSession())
             } else {
                 val redirect = application.href(SignUp(userExists = true))
                 call.respondRedirect(redirect)

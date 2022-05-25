@@ -33,7 +33,7 @@ fun Route.wsChat() {
             try {
                 val session = call.sessions.get<AppSession>()
                 val wsMessage = receiveDeserialized<HTMXWsMessage>()
-                application.log.debug("Received text frame: ${wsMessage.message}, for userID: ${session?.userID ?: "anonymous"}")
+                application.log.debug("Received text frame: ${wsMessage.message}, for userID: ${session?.user?.id ?: "anonymous"}")
                 val toSend = Chat.Message(sender = "Кука Кук", text = wsMessage.message)
                 send(toSend.toHtmxHtml())
             } catch (e: ClosedReceiveChannelException) {
