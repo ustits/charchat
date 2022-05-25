@@ -9,8 +9,9 @@ class Campaign(
     private val partyMemberRepository: PartyMemberRepository
 ) {
 
-    fun characters(): List<Character> {
+    fun partyMembers(): List<PartyMember> {
         return characterRepository.findAllByCampaign(this)
+            .map { PartyMember(this, it) }
     }
 
     fun invite(): Invite {

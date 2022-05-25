@@ -31,9 +31,7 @@ class AppDeps(val config: Configuration) {
     )
     private val partyMemberRepository: PartyMemberRepository = DBPartyMemberRepository()
     private val characterRepository: CharacterRepository = dbCharacters
-    private val sceneFactory: SceneFactory = DBSceneFactory(
-        characterRepository = characterRepository
-    )
+    private val sceneFactory: SceneFactory = DBSceneFactory()
     private val dbCampaigns: DBCampaigns = DBCampaigns(
         sceneFactory = sceneFactory,
         characterRepository = characterRepository,

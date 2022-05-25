@@ -14,7 +14,7 @@ class CampaignPage(private val campaign: Campaign, private val inviteURL: String
 
     override fun Layout.apply() {
         content {
-            val characters = campaign.characters()
+            val characters = campaign.partyMembers().map { it.character }
             h2 {
                 +"Characters"
             }

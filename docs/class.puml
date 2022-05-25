@@ -21,20 +21,22 @@ class Campaign {
     +deleteCharacter(Character)
 }
 
+class PartyMember {
+    +plus(Action): Event
+}
+
 class Invite {
     +url: URL[1]
-    +addToCampaign(Character)
 }
 
 class Character {
     +name: String[1]
-    +plus(Action): Event
 }
 
 class Scene {
     +name: String
     +addEvent(Event)
-    +addCharacter(Character)
+    +addPartyMember(PartyMember)
 }
 
 class Event
@@ -51,13 +53,15 @@ User "1" --> "0..*" Campaign : +campaigns
 User "1" --> "0..*" Character : +characters
 
 Campaign "1" <--> "1" Invite : +invite
-
 Campaign "1" --> "0..*" Scene : +scenes
-Campaign "1" --> "0..*" Character : +characters
+Campaign ..> Character
 
-Character "1..*" <--> "0..*" Scene : +scenes
-Character ..> Event
-Character ..> Action
+PartyMember "1" --> "1" Character
+PartyMember "0..1" <--> "1" Campaign
+
+PartyMember "1..*" <--> "0..*" Scene : +scenes
+PartyMember ..> Event
+PartyMember ..> Action
 
 User ..> Invite
 

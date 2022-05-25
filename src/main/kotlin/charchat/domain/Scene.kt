@@ -1,10 +1,6 @@
 package charchat.domain
 
-class Scene(val id: ID, private val characterRepository: CharacterRepository) {
-
-    fun characters(): List<Character> {
-        return characterRepository.findAllByScene(this)
-    }
+class Scene(val id: ID, val partyMembers: List<PartyMember>) {
 
     fun addEvent(event: Event) {
         TODO()

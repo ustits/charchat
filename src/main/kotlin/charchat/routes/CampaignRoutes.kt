@@ -80,7 +80,8 @@ fun Route.inviteForm(userRepository: UserRepository, inviteRepository: InviteRep
             if (invite == null) {
                 throw NotFoundException()
             } else {
-                val campaignCharacters = invite.campaign.characters().toSet()
+                val campaignCharacters = invite.campaign.partyMembers()
+                    .map { it.character }.toSet()
                 val characters = user.characters() - campaignCharacters
                 call.respondPage(InvitePage(characters, invite))
             }
