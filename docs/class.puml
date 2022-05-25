@@ -4,7 +4,6 @@
 
 class User {
     +name: String[1]
-    +createCampaign(): Campaign
     +createCharacter(): Character
     +joinParty(Invite)
 }
@@ -21,7 +20,9 @@ class Campaign {
     +deleteCharacter(Character)
 }
 
-class DungeonMaster
+class DungeonMaster {
+    +createCampaign(): Campaign
+}
 
 class PartyMember {
     +plus(Action): Event
@@ -51,7 +52,7 @@ class Action {
     +type: ActionType[1]
 }
 
-User "1" --> "0..*" Campaign : +campaigns
+DungeonMaster "1" --> "0..*" Campaign : +campaigns
 User "1" --> "0..*" Character : +characters
 
 Campaign "1" <--> "1" Invite : +invite

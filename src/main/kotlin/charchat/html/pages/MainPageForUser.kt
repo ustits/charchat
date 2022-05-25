@@ -1,5 +1,6 @@
 package charchat.html.pages
 
+import charchat.domain.Campaign
 import charchat.domain.User
 import charchat.html.Layout
 import charchat.routes.CampaignResource
@@ -19,11 +20,11 @@ import kotlinx.html.ul
 class MainPageForUser(
     private val createCampaignURL: String,
     private val createCharacterURL: String,
-    private val user: User
+    private val user: User,
+    private val campaigns: List<Campaign>
 ) : Page {
 
     override fun Layout.apply() {
-        val campaigns = user.campaigns()
         val characters = user.characters()
         content {
             form(action = createCampaignURL, method = FormMethod.post) {

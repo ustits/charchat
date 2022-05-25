@@ -60,14 +60,14 @@ fun Application.configureRouting(appDeps: AppDeps) {
     }
 
     routing {
-        main(appDeps.userRepository())
+        main(appDeps.userRepository(), appDeps.dungeonMasterRepository())
         signIn()
         signUp(appDeps.userPrincipalRepository())
         signInForm()
         signUpForm()
         logout()
         wsChat()
-        createCampaign(appDeps.userRepository())
+        createCampaign(appDeps.dungeonMasterRepository())
         campaignPage(appDeps.campaignRepository())
         createCharacter(appDeps.userRepository())
         characterPage(appDeps.userRepository())

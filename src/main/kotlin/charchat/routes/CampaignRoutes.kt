@@ -2,6 +2,7 @@ package charchat.routes
 
 import charchat.domain.CampaignRepository
 import charchat.domain.CharacterRepository
+import charchat.domain.DungeonMasterRepository
 import charchat.domain.ID
 import charchat.domain.InviteRepository
 import charchat.domain.UserRepository
@@ -42,12 +43,12 @@ object CampaignResource {
 
 }
 
-fun Route.createCampaign(userRepository: UserRepository) {
+fun Route.createCampaign(dungeonMasterRepository: DungeonMasterRepository) {
     authenticate(SESSION_LOGIN_CONFIGURATION_NAME) {
         post<CampaignResource> {
             val session = call.principal<AppSession>()!!
-            val user = userRepository.findByID(ID(session.userID))!!
-            val campaign = user.createCampaign()
+            val dm = dungeonMasterRepository.findByID(ID(session.userID))!!
+            val campaign = dm.createCampaign()
             val redirect = application.href(CampaignResource.ByID(id = campaign.id.value))
             call.respondRedirect(redirect)
         }
